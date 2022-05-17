@@ -1,0 +1,228 @@
+
+							Task 1
+
+include Irvine32.inc
+include macros.inc
+.model small
+.stack 100h
+.data
+var dword ?
+.code
+main proc
+
+mWrite "Enter a value to multiply by 21: "
+call ReadInt
+mov ebx,eax
+mov ecx,eax
+shl eax,4
+shl ebx,2
+shl ecx,0
+add eax,ebx
+add eax,ecx
+mWrite "The answer is: "
+call WriteDec
+exit
+main endp
+end main
+
+
+
+							Task 2
+
+include irvine32.inc
+include macros.inc
+.model small
+.stack 100h
+.data
+var sword -128
+.code
+main proc
+mov eax,-1
+mWrite "-128 has been moved into the AX register successfully: "
+mov ax,var
+call WriteInt
+shl ax,1
+call Crlf
+mWrite "AX has been expanded to "
+call WriteInt
+mWrite " after shifting the bits left by 1"
+rol ax,1
+call Crlf
+mWrite "AX has been expanded to "
+call WriteInt
+mWrite " after rotating the bits left by 1"
+call Crlf
+exit
+main endp
+end main
+
+
+
+							Task 3
+
+include Irvine32.inc
+include macros.inc
+.model small
+.stack 100h
+.data
+bMinutes byte ?
+.code
+main proc
+mWrite "Enter the hours: "
+call ReadInt
+mov ecx,0
+mov ecx,eax
+mWrite "Enter the minutes: "
+call ReadInt
+mov edx,0
+mov edx,eax
+mWrite "Enter the seconds: "
+call ReadInt
+mov ebx,0
+mov ebx,eax
+mov eax,ecx
+shl eax,6
+add al,dl
+shl eax,5
+add al,bl
+call Writebin
+and eax,0000011111100000b
+shr eax,5
+call Crlf
+call WriteBin
+mov bMinutes,al
+call Crlf
+mWrite "The Minutes extracted are: "
+call WriteDec
+exit
+main endp
+end main
+
+
+
+
+
+
+							Task 4
+
+include Irvine32.inc
+include macros.inc
+.model small
+.stack 100h
+.data
+.code
+main proc
+mov eax,0
+mov ebx,0
+mWrite "Enter the value of AX: "
+call ReadInt
+shrd bx,ax,1
+mov eax,ebx
+call Crlf
+call WriteBin
+mov ebx,0
+call Crlf
+mWrite "Enter the value of AX: "
+call ReadInt
+shr al,1
+adc bx,0
+shl bx,15
+call Crlf
+mov eax,ebx
+call WriteBin
+call dumpregs
+exit
+main endp
+end main
+
+
+
+
+							Task 5
+
+include Irvine32.inc
+include macros.inc
+.model small
+.stack 100h
+.data
+val1 sdword ?
+val2 sdword ?
+val3 sdword ?
+.code
+main proc
+mov eax,-1
+mWrite "Enter the value of variable Variable 1: "
+call ReadInt
+mov val1,eax
+mWrite "Enter the value of variable Variable 2: "
+call ReadInt
+mov val2,eax
+mWrite "Enter the value of variable Variable 3: "
+call ReadInt
+mov val3,eax
+mov edx,0
+mov eax,val2
+mov ebx,val3
+idiv ebx
+mov ebx,eax
+mov edx,0
+mov eax,val1
+idiv val2
+mov edx,eax
+mov eax,ebx
+imul edx
+mov val1,eax
+mWrite "The result is: "
+call WriteDec
+exit
+main endp
+end main
+
+
+
+							Task 6
+
+include irvine32.inc
+include macros.inc
+.data
+val1 qword 0A2B2A40674981234h
+val2 qword 08010870000234502h
+sum dword 3 DUP(0)
+.code
+main proc
+mov esi,offset val1
+mov edi,offset val2
+mov ebx,offset sum
+mov ecx,2
+call Extended_Add
+mov esi,8
+mwrite "The Result of the addition of two number is: "
+mov ecx,(lengthof sum)
+L1: 
+mov eax,sum[esi]
+call writehex
+sub esi,4
+loop L1
+call crlf
+exit
+main endp
+Extended_Add proc
+pushad
+clc
+L1:
+mov eax,[esi]
+adc eax,[edi]
+pushfd
+mov [ebx],eax
+add esi,4
+add edi,4
+add ebx,4
+popfd
+loop L1
+adc word ptr [ebx],0
+popad
+ret
+Extended_Add endp
+end main
+
+

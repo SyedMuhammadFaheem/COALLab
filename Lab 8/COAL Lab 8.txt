@@ -1,0 +1,212 @@
+							Task 1
+
+include irvine32.inc
+include macros.inc
+.model small
+.stack 100h
+.data
+arr1 word 1,2,3,4,5,6,7,8,9,10
+arr2 word ?
+msg1 byte "The elements of the first array are: ",0
+msg2 byte "The elements of the second array in reverse order are: ",0
+.code
+main proc
+mov edx,offset msg1
+call WriteString
+mov esi,0
+mov ecx,10
+L1:
+movzx eax,arr1[esi]
+call WriteDec
+Push eax
+add esi,2
+mWrite ", "
+loop L1
+call Crlf
+mov edx,offset msg2
+call WriteString
+mov esi,offset arr2
+mov ecx,10
+L2:
+Pop eax
+mov [esi],eax
+mov eax,[esi]
+call WriteInt
+add esi,2
+mWrite ", "
+loop L2
+exit
+main endp
+end main
+
+
+
+							Task 2
+
+include irvine32.inc
+include macros.inc
+.model small
+.stack 100h
+.data
+arr1 dword 10,20,30,40,50
+arr2 dword 20,40,60,80,100
+.code
+main proc
+call AddFirst
+exit
+main endp
+
+AddFirst proc
+mov esi,0
+mov edx,0
+mov ecx,5
+L1:
+add edx, arr1[esi]
+add esi,4
+loop L1
+mWrite "The sum of the elements of the first array are: "
+mov eax,edx
+call WriteInt
+call Crlf
+call AddSecond
+ret
+AddFirst endp
+
+AddSecond proc
+mov esi,0
+mov ebx,0
+mov ecx,5
+L2:
+add ebx, arr2[esi]
+add esi,4
+loop L2
+mWrite "The sum of the elements of the second array are: "
+mov eax,ebx
+call WriteInt
+call Crlf
+call AddBoth
+ret
+AddSecond endp
+
+AddBoth proc
+mWrite "The sum of the elements of both the arrays are: "
+mov eax,0
+add eax,ebx
+add eax,edx
+call WriteInt
+call Crlf
+ret
+AddBoth endp
+end main
+
+
+
+							Task 3
+
+
+include irvine32.inc
+include macros.inc
+.model small
+.stack 100h
+.data
+row dword ?
+.code
+main proc
+mWrite "Enter the number of rows: "
+call ReadInt
+mov row,eax
+Push row
+call Pattern
+exit
+main endp
+Pattern proc
+mov ebp,esp
+mov eax,1
+mov ecx,[ebp+4]
+L1:
+mov ebx,ecx
+L2:
+mWrite " "
+loop L2
+mov ecx,eax
+L3:
+mWrite "*"
+loop L3
+mov ecx,ebx
+inc eax
+call Crlf
+loop L1
+ret
+Pattern endp
+end main
+
+
+							Task 4
+
+include irvine32.inc
+include macros.inc
+.model small
+.stack 100h
+.data
+row dword ?
+.code
+main proc
+mWrite "Enter the number of rows: "
+call ReadInt
+mov row,eax
+Push row
+call Pattern
+exit
+main endp
+Pattern proc
+mov ebp,esp
+mov edx,1
+mov eax,65
+mov ecx,[ebp+4]
+L1:
+mov ebx,ecx
+L2:
+mWrite " "
+loop L2
+mov ecx,edx
+L3:
+call WriteChar
+inc eax
+loop L3
+mov ecx,ebx
+inc edx
+call Crlf
+loop L1
+ret
+Pattern endp
+end main
+
+
+
+							Task 5
+
+include irvine32.inc
+include macros.inc
+.model small
+.stack 100h
+.data
+.code
+main proc
+call Sum
+exit
+main endp
+Sum proc
+mWrite "Enter the range: "
+call ReadInt
+mov ecx,eax
+mov eax,0
+mov ebx,1
+L1:
+add eax,ebx
+inc ebx
+loop L1
+mWrite "The sum of the elements of the range is: "
+call WriteInt
+ret
+Sum endp
+end main

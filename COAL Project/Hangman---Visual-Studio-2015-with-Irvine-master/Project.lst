@@ -1,0 +1,2312 @@
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    06/09/17 18:06:36
+AddTwo.asm						     Page 1 - 1
+
+
+
+
+				INCLUDE Irvine32.inc
+			      C ; Include file for Irvine32.lib             (Irvine32.inc)
+			      C 
+			      C ;OPTION CASEMAP:NONE		; optional: make identifiers case-sensitive
+			      C 
+			      C INCLUDE SmallWin.inc		; MS-Windows prototypes, structures, and constants
+			      C .NOLIST
+			      C .LIST
+			      C 
+			      C INCLUDE VirtualKeys.inc
+			      C ; VirtualKeys.inc
+			      C .NOLIST
+			      C .LIST
+			      C 
+			      C 
+			      C .NOLIST
+			      C .LIST
+			      C 
+				INCLUDE Macros.inc
+			      C .NOLIST
+			      C .LIST
+			      C 
+				INCLUDE VirtualKeys.inc
+			      C ; VirtualKeys.inc
+			      C 
+			      C ;  Standard MS-Windows Virtual Key definitions
+			      C 
+ = 00000001		      C VK_LBUTTON      = 01H
+ = 00000002		      C VK_RBUTTON      = 02H
+ = 00000003		      C VK_CANCEL       = 03H
+ = 00000008		      C VK_BACK         = 08H
+ = 00000009		      C VK_TAB          = 09H
+ = 0000000C		      C VK_CLEAR        = 0cH
+ = 0000000D		      C VK_RETURN       = 0dH
+ = 00000010		      C VK_SHIFT        = 10H
+ = 00000011		      C VK_CONTROL      = 11H
+ = 00000012		      C VK_MENU         = 12H
+ = 00000013		      C VK_PAUSE        = 13H
+ = 00000014		      C VK_CAPITAL      = 14H
+ = 0000001B		      C VK_ESCAPE       = 1bH
+ = 00000020		      C VK_SPACE        = 20H
+			      C 
+ = 00000021		      C VK_PRIOR        = 21H
+ = 00000022		      C VK_NEXT         = 22H
+ = 00000023		      C VK_END          = 23H
+ = 00000024		      C VK_HOME         = 24H
+ = 00000025		      C VK_LEFT         = 25H
+ = 00000026		      C VK_UP           = 26H
+ = 00000027		      C VK_RIGHT        = 27H
+ = 00000028		      C VK_DOWN         = 28H
+			      C 
+			      C ;  VK_A thru VK_Z are the same as their ASCII equivalents: 'A' thru 'Z'
+			      C ;  VK_0 thru VK_9 are the same as their ASCII equivalents: '0' thru '0'
+			      C 
+ = 0000002A		      C VK_PRINT        = 2aH
+ = 0000002B		      C VK_EXECUTE      = 2bH
+ = 0000002C		      C VK_SNAPSHOT     = 2ch   ; Printscreen key..
+ = 0000002D		      C VK_INSERT       = 2dH
+ = 0000002E		      C VK_DELETE       = 2eH
+ = 0000002F		      C VK_HELP         = 2fH
+			      C 
+ = 00000060		      C VK_NUMPAD0      = 60H
+ = 00000061		      C VK_NUMPAD1      = 61H
+ = 00000062		      C VK_NUMPAD2      = 62H
+ = 00000063		      C VK_NUMPAD3      = 63H
+ = 00000064		      C VK_NUMPAD4      = 64H
+ = 00000065		      C VK_NUMPAD5      = 65H
+ = 00000066		      C VK_NUMPAD6      = 66H
+ = 00000067		      C VK_NUMPAD7      = 67H
+ = 00000068		      C VK_NUMPAD8      = 68H
+ = 00000069		      C VK_NUMPAD9      = 69H
+ = 0000006A		      C VK_MULTIPLY     = 6AH
+ = 0000006B		      C VK_ADD          = 6BH
+ = 0000006C		      C VK_SEPARATER    = 6CH
+ = 0000006D		      C VK_SUBTRACT     = 6DH
+ = 0000006E		      C VK_DECIMAL      = 6EH
+ = 0000006F		      C VK_DIVIDE       = 6FH
+			      C 
+ = 00000070		      C VK_F1           = 70H
+ = 00000071		      C VK_F2           = 71H
+ = 00000072		      C VK_F3           = 72H
+ = 00000073		      C VK_F4           = 73H
+ = 00000074		      C VK_F5           = 74H
+ = 00000075		      C VK_F6           = 75H
+ = 00000076		      C VK_F7           = 76H
+ = 00000077		      C VK_F8           = 77H
+ = 00000078		      C VK_F9           = 78H
+ = 00000079		      C VK_F10          = 79H
+ = 0000007A		      C VK_F11          = 7aH
+ = 0000007B		      C VK_F12          = 7bH
+ = 0000007C		      C VK_F13          = 7cH
+ = 0000007D		      C VK_F14          = 7dH
+ = 0000007E		      C VK_F15          = 7eH
+ = 0000007F		      C VK_F16          = 7fH
+ = 00000080		      C VK_F17          = 80H
+ = 00000081		      C VK_F18          = 81H
+ = 00000082		      C VK_F19          = 82H
+ = 00000083		      C VK_F20          = 83H
+ = 00000084		      C VK_F21          = 84H
+ = 00000085		      C VK_F22          = 85H
+ = 00000086		      C VK_F23          = 86H
+ = 00000087		      C VK_F24          = 87H
+			      C 
+ = 00000090		      C VK_NUMLOCK      = 90H
+ = 00000091		      C VK_SCROLL       = 91H
+			      C 
+
+ 00000000			.data
+
+ = 0dh,0ah			endl EQU <0dh,0ah>	; end of line sequence
+ 00000000			message LABEL BYTE
+ 00000000  20 20 20 20 20		BYTE "                                                                          " ,endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 0D
+	   0A
+ 0000004C  20 20 20 20 20		BYTE "                                                                          " ,endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 0D
+	   0A
+ 00000098  20 20 20 20 20		BYTE "      __   __  _______  __    _  _______  __   __  _______  __    _       " ,endl
+	   20 5F 5F 20 20
+	   20 5F 5F 20 20
+	   5F 5F 5F 5F 5F
+	   5F 5F 20 20 5F
+	   5F 20 20 20 20
+	   5F 20 20 5F 5F
+	   5F 5F 5F 5F 5F
+	   20 20 5F 5F 20
+	   20 20 5F 5F 20
+	   20 5F 5F 5F 5F
+	   5F 5F 5F 20 20
+	   5F 5F 20 20 20
+	   20 5F 20 20 20
+	   20 20 20 20 0D
+	   0A
+ 000000E4  20 20 20 20 20		BYTE "     |  | |  ||   _   ||  |  | ||       ||  |_|  ||   _   ||  |  | |      " ,endl
+	   7C 20 20 7C 20
+	   7C 20 20 7C 7C
+	   20 20 20 5F 20
+	   20 20 7C 7C 20
+	   20 7C 20 20 7C
+	   20 7C 7C 20 20
+	   20 20 20 20 20
+	   7C 7C 20 20 7C
+	   5F 7C 20 20 7C
+	   7C 20 20 20 5F
+	   20 20 20 7C 7C
+	   20 20 7C 20 20
+	   7C 20 7C 20 20
+	   20 20 20 20 0D
+	   0A
+ 00000130  20 20 20 20 20		BYTE "     |  |_|  ||  |_|  ||   |_| ||    ___||       ||  |_|  ||   |_| |      " ,endl
+	   7C 20 20 7C 5F
+	   7C 20 20 7C 7C
+	   20 20 7C 5F 7C
+	   20 20 7C 7C 20
+	   20 20 7C 5F 7C
+	   20 7C 7C 20 20
+	   20 20 5F 5F 5F
+	   7C 7C 20 20 20
+	   20 20 20 20 7C
+	   7C 20 20 7C 5F
+	   7C 20 20 7C 7C
+	   20 20 20 7C 5F
+	   7C 20 7C 20 20
+	   20 20 20 20 0D
+	   0A
+ 0000017C  20 20 20 20 20		BYTE "     |       ||       ||       ||   | __ |       ||       ||       |      " ,endl
+	   7C 20 20 20 20
+	   20 20 20 7C 7C
+	   20 20 20 20 20
+	   20 20 7C 7C 20
+	   20 20 20 20 20
+	   20 7C 7C 20 20
+	   20 7C 20 5F 5F
+	   20 7C 20 20 20
+	   20 20 20 20 7C
+	   7C 20 20 20 20
+	   20 20 20 7C 7C
+	   20 20 20 20 20
+	   20 20 7C 20 20
+	   20 20 20 20 0D
+	   0A
+ 000001C8  20 20 20 20 20		BYTE "     |       ||       ||  _    ||   ||  ||       ||       ||  _    |      " ,endl
+	   7C 20 20 20 20
+	   20 20 20 7C 7C
+	   20 20 20 20 20
+	   20 20 7C 7C 20
+	   20 5F 20 20 20
+	   20 7C 7C 20 20
+	   20 7C 7C 20 20
+	   7C 7C 20 20 20
+	   20 20 20 20 7C
+	   7C 20 20 20 20
+	   20 20 20 7C 7C
+	   20 20 5F 20 20
+	   20 20 7C 20 20
+	   20 20 20 20 0D
+	   0A
+ 00000214  20 20 20 20 20		BYTE "     |   _   ||   _   || | |   ||   |_| || ||_|| ||   _   || | |   |      " ,endl
+	   7C 20 20 20 5F
+	   20 20 20 7C 7C
+	   20 20 20 5F 20
+	   20 20 7C 7C 20
+	   7C 20 7C 20 20
+	   20 7C 7C 20 20
+	   20 7C 5F 7C 20
+	   7C 7C 20 7C 7C
+	   5F 7C 7C 20 7C
+	   7C 20 20 20 5F
+	   20 20 20 7C 7C
+	   20 7C 20 7C 20
+	   20 20 7C 20 20
+	   20 20 20 20 0D
+	   0A
+ 00000260  20 20 20 20 20		BYTE "     |__| |__||__| |__||_|  |__||_______||_|   |_||__| |__||_|  |__|      " ,endl
+	   7C 5F 5F 7C 20
+	   7C 5F 5F 7C 7C
+	   5F 5F 7C 20 7C
+	   5F 5F 7C 7C 5F
+	   7C 20 20 7C 5F
+	   5F 7C 7C 5F 5F
+	   5F 5F 5F 5F 5F
+	   7C 7C 5F 7C 20
+	   20 20 7C 5F 7C
+	   7C 5F 5F 7C 20
+	   7C 5F 5F 7C 7C
+	   5F 7C 20 20 7C
+	   5F 5F 7C 20 20
+	   20 20 20 20 0D
+	   0A
+ 000002AC  20 20 20 20 20		BYTE "                                                                          " ,endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 0D
+	   0A
+ 000002F8  20 20 20 20 20		BYTE "     Copyright (C) 2017  Stefan TESANOVIC 2016/675                        " ,endl
+	   43 6F 70 79 72
+	   69 67 68 74 20
+	   28 43 29 20 32
+	   30 31 37 20 20
+	   53 74 65 66 61
+	   6E 20 54 45 53
+	   41 4E 4F 56 49
+	   43 20 32 30 31
+	   36 2F 36 37 35
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 0D
+	   0A
+ 00000344  20 20 20 20 20		BYTE "                         Predrag MITROVIC 2016/678                        " ,endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   50 72 65 64 72
+	   61 67 20 4D 49
+	   54 52 4F 56 49
+	   43 20 32 30 31
+	   36 2F 36 37 38
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 0D
+	   0A
+ 00000390  20 20 20 20 20		BYTE "                                                                          " ,endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 0D
+	   0A
+ 000003DC 000003DC		messageSize DWORD ($-message)
+ 000003E0 00000000		consoleHandle HANDLE 0     ; handle to standard output device
+ 000003E4 00000000		bytesWritten  DWORD ?      ; number of bytes written
+
+ 000003E8			HANGMAN_GOODGAME_00 LABEL BYTE 
+ 000003E8  2B 2D 2D 2D 2D						BYTE "+------+       ",endl
+	   2D 2D 2B 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000003F9  7C 20 20 20 20	                    BYTE "|      |       ",endl
+	   20 20 7C 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 0000040A  7C 20 20 20 20	                    BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 0000041B  7C 20 20 20 20	                    BYTE "|      O       ",endl
+	   20 20 4F 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 0000042C  7C 20 20 20 20	                    BYTE "|     /|\      ",endl
+	   20 2F 7C 5C 20
+	   20 20 20 20 20
+	   0D 0A
+ 0000043D  7C 20 20 20 20	                    BYTE "|     / \      ",endl
+	   20 2F 20 5C 20
+	   20 20 20 20 20
+	   0D 0A
+ 0000044E  2B 2D 2D 2D 2D	                    BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+ 0000045F  7C 20 59 4F 55	                    BYTE "| YOU   WIN  | ",endl
+	   20 20 20 57 49
+	   4E 20 20 7C 20
+	   0D 0A
+ 00000470  2B 2D 2D 2D 2D	                    BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+ 00000481 00000099		messageSizeGoodGame DWORD ($-HANGMAN_GOODGAME_00)
+
+ 00000485			HANGMAN_GOODGAME_01 LABEL BYTE 
+ 00000485  2B 2D 2D 2D 2D						BYTE "+------+       ",endl
+	   2D 2D 2B 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000496  7C 20 20 20 20	                    BYTE "|      |       ",endl
+	   20 20 7C 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000004A7  7C 20 20 20 20	                    BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000004B8  7C 20 20 20 20	                    BYTE "|      O_      ",endl
+	   20 20 4F 5F 20
+	   20 20 20 20 20
+	   0D 0A
+ 000004C9  7C 20 20 20 20	                    BYTE "|     /|       ",endl
+	   20 2F 7C 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000004DA  7C 20 20 20 20	                    BYTE "|     / \      ",endl
+	   20 2F 20 5C 20
+	   20 20 20 20 20
+	   0D 0A
+ 000004EB  2B 2D 2D 2D 2D	                    BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+ 000004FC  7C 20 59 4F 55	                    BYTE "| YOU   WIN  | ",endl
+	   20 20 20 57 49
+	   4E 20 20 7C 20
+	   0D 0A
+ 0000050D  2B 2D 2D 2D 2D	                    BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+
+ 0000051E			HANGMAN_GOODGAME_02 LABEL BYTE 
+ 0000051E  2B 2D 2D 2D 2D						BYTE "+------+       ",endl
+	   2D 2D 2B 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 0000052F  7C 20 20 20 20	                    BYTE "|      |       ",endl
+	   20 20 7C 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000540  7C 20 20 20 20	                    BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000551  7C 20 20 20 20	                    BYTE "|      O/      ",endl
+	   20 20 4F 2F 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000562  7C 20 20 20 20	                    BYTE "|     /|       ",endl
+	   20 2F 7C 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000573  7C 20 20 20 20	                    BYTE "|     / \      ",endl
+	   20 2F 20 5C 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000584  2B 2D 2D 2D 2D	                    BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+ 00000595  7C 20 59 4F 55	                    BYTE "| YOU   WIN  | ",endl
+	   20 20 20 57 49
+	   4E 20 20 7C 20
+	   0D 0A
+ 000005A6  2B 2D 2D 2D 2D	                    BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+
+ 000005B7			HANGMAN_GOODGAME_03 LABEL BYTE 
+ 000005B7  2B 2D 2D 2D 2D						BYTE "+------+       ",endl
+	   2D 2D 2B 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000005C8  7C 20 20 20 20	                    BYTE "|      |       ",endl
+	   20 20 7C 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000005D9  7C 20 20 20 20	                    BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000005EA  7C 20 20 20 20	                    BYTE "|      O_      ",endl
+	   20 20 4F 5F 20
+	   20 20 20 20 20
+	   0D 0A
+ 000005FB  7C 20 20 20 20	                    BYTE "|     /|       ",endl
+	   20 2F 7C 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 0000060C  7C 20 20 20 20	                    BYTE "|     / \      ",endl
+	   20 2F 20 5C 20
+	   20 20 20 20 20
+	   0D 0A
+ 0000061D  2B 2D 2D 2D 2D	                    BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+ 0000062E  7C 20 59 4F 55	                    BYTE "| YOU   WIN  | ",endl
+	   20 20 20 57 49
+	   4E 20 20 7C 20
+	   0D 0A
+ 0000063F  2B 2D 2D 2D 2D	                    BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+
+ 00000650			HANGMAN_GAMEOVER_00 LABEL BYTE 
+ 00000650  2B 2D 2D 2D 2D						BYTE "+------+       ",endl
+	   2D 2D 2B 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000661  7C 20 20 20 20	                    BYTE "|      |       ",endl
+	   20 20 7C 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000672  7C 20 20 20 20	                    BYTE "|      O       ",endl
+	   20 20 4F 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000683  7C 20 20 20 20	                    BYTE "|     /|\      ",endl
+	   20 2F 7C 5C 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000694  7C 20 20 20 20	                    BYTE "|     / \      ",endl
+	   20 2F 20 5C 20
+	   20 20 20 20 20
+	   0D 0A
+ 000006A5  7C 20 20 20 20	                    BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000006B6  2B 2D 2D 2D 2D	                    BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+ 000006C7  7C 20 20 59 4F	                    BYTE "|  YOU  DIE  | ",endl
+	   55 20 20 44 49
+	   45 20 20 7C 20
+	   0D 0A
+ 000006D8  2B 2D 2D 2D 2D	                    BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+
+ 000006E9			HANGMAN_GAMEOVER_01 LABEL BYTE 
+ 000006E9  2B 2D 2D 2D 2D						BYTE "+------+       ",endl
+	   2D 2D 2B 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000006FA  7C 20 20 20 20	                    BYTE "|     /        ",endl
+	   20 2F 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 0000070B  7C 20 20 20 5F	                    BYTE "|   _O         ",endl
+	   4F 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 0000071C  7C 20 20 5F 2F	                    BYTE "|  _/\         ",endl
+	   5C 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 0000072D  7C 20 20 20 5C	                    BYTE "|   \          ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 0000073E  7C 20 20 20 20	                    BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 0000074F  2B 2D 2D 2D 2D	                    BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+ 00000760  7C 20 20 59 4F	                    BYTE "|  YOU  DIE  | ",endl
+	   55 20 20 44 49
+	   45 20 20 7C 20
+	   0D 0A
+ 00000771  2B 2D 2D 2D 2D	                    BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+
+ 00000782			HANGMAN_GAMEOVER_02 LABEL BYTE 
+ 00000782  2B 2D 2D 2D 2D						BYTE "+------+       ",endl
+	   2D 2D 2B 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000793  7C 20 20 20 20	                    BYTE "|      |       ",endl
+	   20 20 7C 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000007A4  7C 20 20 20 20	                    BYTE "|      O       ",endl
+	   20 20 4F 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000007B5  7C 20 20 20 20	                    BYTE "|     /|\      ",endl
+	   20 2F 7C 5C 20
+	   20 20 20 20 20
+	   0D 0A
+ 000007C6  7C 20 20 20 20	                    BYTE "|     / \      ",endl
+	   20 2F 20 5C 20
+	   20 20 20 20 20
+	   0D 0A
+ 000007D7  7C 20 20 20 20	                    BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000007E8  2B 2D 2D 2D 2D	                    BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+ 000007F9  7C 20 20 59 4F	                    BYTE "|  YOU  DIE  | ",endl
+	   55 20 20 44 49
+	   45 20 20 7C 20
+	   0D 0A
+ 0000080A  2B 2D 2D 2D 2D	                    BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+
+ 0000081B			HANGMAN_GAMEOVER_03 LABEL BYTE 
+ 0000081B  2B 2D 2D 2D 2D						BYTE "+------+       ",endl
+	   2D 2D 2B 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 0000082C  7C 20 20 20 20	                    BYTE "|       \      ",endl
+	   20 20 20 5C 20
+	   20 20 20 20 20
+	   0D 0A
+ 0000083D  7C 20 20 20 20	                    BYTE "|        O_    ",endl
+	   20 20 20 20 4F
+	   5F 20 20 20 20
+	   0D 0A
+ 0000084E  7C 20 20 20 20	                    BYTE "|        /\_   ",endl
+	   20 20 20 20 2F
+	   5C 5F 20 20 20
+	   0D 0A
+ 0000085F  7C 20 20 20 20	                    BYTE "|         /    ",endl
+	   20 20 20 20 20
+	   2F 20 20 20 20
+	   0D 0A
+ 00000870  7C 20 20 20 20	                    BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000881  2B 2D 2D 2D 2D	                    BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+ 00000892  7C 20 20 59 4F	                    BYTE "|  YOU  DIE  | ",endl
+	   55 20 20 44 49
+	   45 20 20 7C 20
+	   0D 0A
+ 000008A3  2B 2D 2D 2D 2D	                    BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+
+ 000008B4			HANGMAN_LIVES_06 LABEL BYTE 
+ 000008B4  2B 2D 2D 2D 2D						BYTE "+------+       ",endl
+	   2D 2D 2B 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000008C5  7C 20 20 20 20						BYTE "|      |       ",endl
+	   20 20 7C 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000008D6  7C 20 20 20 20						BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000008E7  7C 20 20 20 20						BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000008F8  7C 20 20 20 20						BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000909  7C 20 20 20 20						BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 0000091A  2B 2D 2D 2D 2D						BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+ 0000092B  7C 20 20 20 20						BYTE "|            | ",endl
+	   20 20 20 20 20
+	   20 20 20 7C 20
+	   0D 0A
+ 0000093C  2B 2D 2D 2D 2D						BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+
+ 0000094D			HANGMAN_LIVES_05 LABEL BYTE 
+ 0000094D  2B 2D 2D 2D 2D						BYTE "+------+       ",endl 
+	   2D 2D 2B 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 0000095E  7C 20 20 20 20						BYTE "|      |       ",endl
+	   20 20 7C 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 0000096F  7C 20 20 20 20						BYTE "|      O       ",endl
+	   20 20 4F 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000980  7C 20 20 20 20						BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000991  7C 20 20 20 20						BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000009A2  7C 20 20 20 20						BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000009B3  2B 2D 2D 2D 2D						BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+ 000009C4  7C 20 20 20 20						BYTE "|            | ",endl
+	   20 20 20 20 20
+	   20 20 20 7C 20
+	   0D 0A
+ 000009D5  2B 2D 2D 2D 2D						BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+
+ 000009E6			HANGMAN_LIVES_04 LABEL BYTE 
+ 000009E6  2B 2D 2D 2D 2D						BYTE "+------+       ",endl
+	   2D 2D 2B 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 000009F7  7C 20 20 20 20						BYTE "|      |       ",endl
+	   20 20 7C 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000A08  7C 20 20 20 20						BYTE "|      O       ",endl
+	   20 20 4F 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000A19  7C 20 20 20 20						BYTE "|      |       ",endl
+	   20 20 7C 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000A2A  7C 20 20 20 20						BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000A3B  7C 20 20 20 20						BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000A4C  2B 2D 2D 2D 2D						BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+ 00000A5D  7C 20 20 20 20						BYTE "|            | ",endl
+	   20 20 20 20 20
+	   20 20 20 7C 20
+	   0D 0A
+ 00000A6E  2B 2D 2D 2D 2D						BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+
+ 00000A7F			HANGMAN_LIVES_03 LABEL BYTE 
+ 00000A7F  2B 2D 2D 2D 2D						BYTE "+------+       ",endl
+	   2D 2D 2B 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000A90  7C 20 20 20 20						BYTE "|      |       ",endl
+	   20 20 7C 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000AA1  7C 20 20 20 20						BYTE "|      O       ",endl
+	   20 20 4F 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000AB2  7C 20 20 20 20						BYTE "|     /|       ",endl
+	   20 2F 7C 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000AC3  7C 20 20 20 20						BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000AD4  7C 20 20 20 20						BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000AE5  2B 2D 2D 2D 2D						BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+ 00000AF6  7C 20 20 20 20						BYTE "|            | ",endl
+	   20 20 20 20 20
+	   20 20 20 7C 20
+	   0D 0A
+ 00000B07  2B 2D 2D 2D 2D						BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+
+ 00000B18			HANGMAN_LIVES_02 LABEL BYTE 
+ 00000B18  2B 2D 2D 2D 2D						BYTE "+------+       ",endl
+	   2D 2D 2B 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000B29  7C 20 20 20 20						BYTE "|      |       ",endl
+	   20 20 7C 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000B3A  7C 20 20 20 20						BYTE "|      O       ",endl
+	   20 20 4F 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000B4B  7C 20 20 20 20						BYTE "|     /|\      ",endl
+	   20 2F 7C 5C 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000B5C  7C 20 20 20 20						BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000B6D  7C 20 20 20 20						BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000B7E  2B 2D 2D 2D 2D						BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+ 00000B8F  7C 20 20 20 20						BYTE "|            | ",endl
+	   20 20 20 20 20
+	   20 20 20 7C 20
+	   0D 0A
+ 00000BA0  2B 2D 2D 2D 2D						BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+
+ 00000BB1			HANGMAN_LIVES_01 LABEL BYTE 
+ 00000BB1  2B 2D 2D 2D 2D						BYTE "+------+       ",endl
+	   2D 2D 2B 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000BC2  7C 20 20 20 20						BYTE "|      |       ",endl
+	   20 20 7C 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000BD3  7C 20 20 20 20						BYTE "|      O       ",endl
+	   20 20 4F 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000BE4  7C 20 20 20 20						BYTE "|     /|\      ",endl
+	   20 2F 7C 5C 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000BF5  7C 20 20 20 20						BYTE "|     /        ",endl
+	   20 2F 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000C06  7C 20 20 20 20						BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000C17  2B 2D 2D 2D 2D						BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+ 00000C28  7C 20 20 20 20						BYTE "|            | ",endl
+	   20 20 20 20 20
+	   20 20 20 7C 20
+	   0D 0A
+ 00000C39  2B 2D 2D 2D 2D						BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+
+ 00000C4A			HANGMAN_LIVES_00 LABEL BYTE 
+ 00000C4A  2B 2D 2D 2D 2D						BYTE "+------+       ",endl
+	   2D 2D 2B 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000C5B  7C 20 20 20 20						BYTE "|      |       ",endl
+	   20 20 7C 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000C6C  7C 20 20 20 20						BYTE "|      O       ",endl
+	   20 20 4F 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000C7D  7C 20 20 20 20						BYTE "|     /|\      ",endl
+	   20 2F 7C 5C 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000C8E  7C 20 20 20 20						BYTE "|     / \      ",endl
+	   20 2F 20 5C 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000C9F  7C 20 20 20 20						BYTE "|              ",endl
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   0D 0A
+ 00000CB0  2B 2D 2D 2D 2D						BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+ 00000CC1  7C 20 20 20 20						BYTE "|            | ",endl
+	   20 20 20 20 20
+	   20 20 20 7C 20
+	   0D 0A
+ 00000CD2  2B 2D 2D 2D 2D						BYTE "+------------+ ",endl
+	   2D 2D 2D 2D 2D
+	   2D 2D 2D 2B 20
+	   0D 0A
+
+				; random number what we generete
+ 00000CE3 00000000		ranNum DWORD ?		
+
+				;All words what is posible to guess. 
+				;Pick by random generartor and put in selectedWords
+ 00000CE7 42 49 43 59 43	manyWords	BYTE "BICYCLE",	0
+	   4C 45 00
+ 00000CEF  43 41 4E 4F 45				BYTE "CANOE", 0
+	   00
+ 00000CF5  53 43 41 54 45				BYTE "SCATEBOARD", 0
+	   42 4F 41 52 44
+	   00
+ 00000D00  4F 46 46 53 49				BYTE "OFFSIDE", 0
+	   44 45 00
+ 00000D08  54 45 4E 4E 49				BYTE "TENNIS", 0
+	   53 00
+ 00000D0F  53 4F 46 54 42				BYTE "SOFTBALL", 0
+	   41 4C 4C 00
+ 00000D18  4B 4E 4F 43 4B				BYTE "KNOCKOUT", 0
+	   4F 55 54 00
+ 00000D21  43 48 41 4C 4C				BYTE "CHALLENGE", 0
+	   45 4E 47 45 00
+ 00000D2B  53 4C 41 4C 4F				BYTE "SLALOM", 0
+	   4D 00
+ 00000D32  4D 41 52 41 54				BYTE "MARATHON", 0
+	   48 4F 4E 00
+ 00000D3B  00						BYTE 0					; End of list
+ 00000D3C = 00000055		len equ $ - manyWords
+
+				; number what we make to know where are you in game
+ 00000D3C 00000000		statusGameLive DWORD ?		
+
+				;Wordls what we select by rundom code
+ 00000D40 20 20 20 20 20	selectedWords BYTE "                    ", 0
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   20 20 20 20 20
+	   00
+				;Use as variable in funcstion for lenght of Array
+ 00000D55 00000000		lengthArray DWORD ?
+
+				;Letter what we guess, input from keyboard
+ 00000D59 00			guessLetter BYTE ?
+				;World what we print with -------,0
+ 00000D5A  00000032 [		guessWords BYTE 50 DUP (?)
+	    00
+	   ]
+				;Array of guess Letter
+ 00000D8C  00000032 [		guessLetterArray BYTE 50 DUP (?)
+	    00
+	   ]
+ 00000DBE 41			chardelete   BYTE 'A'
+				;Letter what are unknows, change with - 
+ 00000DBF 2D			letterDash BYTE '-'
+
+ = 000003E8			drowDelay = 1000	; delay 1 sec
+ 00000DC0 0F			var_loop BYTE 15	; repeat 15 times
+					
+ 00000000			.code
+
+ 00000000			main PROC
+
+				  ; Get the console output handle:
+					INVOKE GetStdHandle, STD_OUTPUT_HANDLE
+ 00000000  6A F5	   *	    push    -00000000Bh
+ 00000002  E8 00000000 E   *	    call   GetStdHandle
+ 00000007  A3 000003E0 R		mov consoleHandle,eax
+
+ 0000000C			jump_game_start_again:
+
+				  ; Write a string to the console:
+					INVOKE WriteConsole,
+						consoleHandle,				;console output handle
+						ADDR message,       		; string pointer
+						messageSize,				; string length
+						ADDR bytesWritten,			; returns num bytes written
+						0							; not used
+ 0000000C  6A 00	   *	    push   +000000000h
+ 0000000E  68 000003E4 R   *	    push   OFFSET bytesWritten
+ 00000013  FF 35 000003DC R *	    push   messageSize
+ 00000019  68 00000000 R   *	    push   OFFSET message
+ 0000001E  FF 35 000003E0 R *	    push   consoleHandle
+ 00000024  E8 00000000 E   *	    call   WriteConsoleA
+
+				  ;Part of code for generate random number from 0 until 9
+ 00000029  B8 0000000A			mov  eax,10			;get random 0 to 9
+ 0000002E  E8 00000000 E		call Randomize		;re-seed generator
+ 00000033  E8 00000000 E		call RandomRange   
+ 00000038  A3 00000CE3 R		mov  ranNum,eax		;save random number
+					
+					;call WriteDec
+ 0000003D  E8 00000000 E		call Crlf			;new line
+
+				  ;Find a selectedWords base on generate ranNum from manyWords
+ 00000042  8B 15 00000CE3 R		mov edx, ranNum     ;Index
+ 00000048  E8 000003E7			call find_str       ;Returns EDI = pointer to string, we pick world
+
+				  ;Copy find world in variable selectedWords
+					INVOKE Str_copy,
+				        ADDR [edi],
+				        ADDR selectedWords
+ 0000004D  68 00000D40 R   *	    push   OFFSET selectedWords
+ 00000052  8D 07	   *	    lea    eax,  [edi]
+ 00000054  50		   *	    push   eax
+ 00000055  E8 00000000 E   *	    call   Str_copy
+				  
+				  ;Print selectedWords on screen	
+					;mov edx, offset selectedWords
+					;call WriteString
+					;call Crlf			;new line
+
+				  ;Make array of dash. It would be world what we guess
+ 0000005A  E8 000003EC			call make_array_dash
+
+				  ;Inicialization number of life what you have
+ 0000005F  C7 05 00000D3C R		mov statusGameLive, 6
+	   00000006
+
+ 00000069			again_input_world:
+
+				  ;Print figure depending on the number of lives
+ 00000069  E8 00000425			call print_hangman_live
+
+				  ;Check if you have more live. If player lost all lives, game is over
+ 0000006E  83 3D 00000D3C R		cmp statusGameLive, 0
+	   00
+ 00000075  0F 84 0000029C		je loop_game_over
+
+
+ 0000007B  B8 00000002			mov  eax,green+(black*16)
+ 00000080  E8 00000000 E	    call SetTextColor
+
+					mWrite <"Guess a letter: ">
+ 00000DC1		     1		.data		
+ 00000DC1 47 75 65 73 73     1		??0000 BYTE "Guess a letter: ",0	
+	   20 61 20 6C 65
+	   74 74 65 72 3A
+	   20 00
+ 00000085		     1		.code
+ 00000085  52		     1		push	edx
+ 00000086  BA 00000DC1 R     1		mov	edx,OFFSET ??0000
+ 0000008B  E8 00000000 E     1		call	WriteString
+ 00000090  5A		     1		pop	edx
+
+ 00000091  E8 00000000 E		call readChar	;User inputs char
+ 00000096  3C 1B			cmp al, 27		;Check if is press ESC
+ 00000098  0F 84 0000009F		je exit_main	;YES, end game
+ 0000009E  3C 20			cmp al, 32		;Check if is press SPACE
+ 000000A0  0F 84 0000010E		je restart_game	;YES, restart game
+ 000000A6  24 DF			and al, 0DFH	;Convert lowercase input to uppercase. 
+									;If uppercase, it remains uppercase
+ 000000A8  50				push eax
+ 000000A9  2C 41			sub al, 'A'		;checks if it is a letter
+ 000000AB  3C 19		    cmp al, 'Z'-'A'
+ 000000AD  76 02		    jbe uppercase
+ 000000AF  EB B8			jmp again_input_world
+ 000000B1			uppercase:
+ 000000B1  58				pop eax
+ 000000B2  A2 00000D59 R		mov guessLetter, al
+ 000000B7  E8 00000000 E		call WriteChar
+ 000000BC  E8 00000000 E		call Crlf		;new line
+ 000000C1  E8 00000000 E		call Crlf		;new line
+
+ 000000C6  B8 0000000F			mov  eax,white+(black*16)
+ 000000CB  E8 00000000 E	    call SetTextColor
+
+
+					;Check if letter is alredy guessed
+ 000000D0  B9 00000032			mov ecx, LENGTHOF guessLetterArray
+ 000000D5  BF 00000D8C R		mov edi, offset guessLetterArray
+ 000000DA  A0 00000D59 R		mov al, guessLetter                 ; Load character to find
+ 000000DF  F2/ AE			repne scasb                         ; Search
+ 000000E1  74 61			je loop_guess_letter_exists			; Letter already exist
+						
+
+ 000000E3  E8 00000385			call make_array_guess_letter 
+
+
+					;Check if letter is in selectedWords. If not take life
+ 000000E8  B9 00000015			mov ecx, LENGTHOF selectedWords
+ 000000ED  BF 00000D40 R		mov edi, offset selectedWords
+ 000000F2  A0 00000D59 R		mov al, guessLetter                 ; Load character to find
+ 000000F7  F2/ AE			repne scasb                         ; Search
+ 000000F9  0F 85 000000AA		jne loop_take_live					; Letter exist take life
+
+
+				  ; We are making new array, guess letter whange dash on right pleace
+ 000000FF  BE 00000D40 R	    mov esi, offset selectedWords       ; Source
+ 00000104  BF 00000D5A R	    mov edi, offset guessWords          ; Destination
+ 00000109  B9 00000015		    mov ecx, LENGTHOF selectedWords     ; Number of bytes to check
+ 0000010E  A0 00000D59 R	    mov al, guessLetter                 ; Search for that character
+ 00000113  33 DB		    xor ebx, ebx                        ; Index EBX = 0
+
+ 00000115			ride_hard_loop:
+ 00000115  38 04 33		    cmp [esi+ebx], al                   ; Compare memory/register
+ 00000118  75 03		    jne @F                              ; Skip next line if no match
+ 0000011A  88 04 3B		    mov [edi+ebx], al                   ; Hang 'em lower
+ 0000011D			    @@:
+ 0000011D  43			    inc ebx                             ; Increment pointer
+ 0000011E  49			    dec ecx                             ; Decrement counter
+ 0000011F  75 F4		    jne ride_hard_loop                  ; Jump if ECX != 0
+
+				 
+				  ;Is there more letter to guess of we finish
+ 00000121  B9 00000032			mov ecx, LENGTHOF guessWords		
+ 00000126  BF 00000D5A R	    mov edi, offset guessWords
+ 0000012B  A0 00000DBF R	    mov al, letterDash                  ; Load character to find
+ 00000130  F2/ AE		    repne scasb							; Search
+ 00000132  0F 85 000000CC	    jne loop_game_win					; No more letter
+ 00000138  E9 FFFFFF2C			jmp again_input_world				; Guess next world
+
+
+ 0000013D			exit_main:
+						
+					INVOKE ExitProcess,0
+ 0000013D  6A 00	   *	    push   +000000000h
+ 0000013F  E8 00000000 E   *	    call   ExitProcess
+
+ 00000144			loop_guess_letter_exists:
+
+ 00000144  B8 00000004				mov  eax,red+(black*16)
+ 00000149  E8 00000000 E			call SetTextColor
+						
+						mWrite <"Sorry, you alredy guessed letter, ">
+ 00000DD2		     1		.data		
+ 00000DD2 53 6F 72 72 79     1		??0001 BYTE "Sorry, you alredy guessed letter, ",0	
+	   2C 20 79 6F 75
+	   20 61 6C 72 65
+	   64 79 20 67 75
+	   65 73 73 65 64
+	   20 6C 65 74 74
+	   65 72 2C 20 00
+ 0000014E		     1		.code
+ 0000014E  52		     1		push	edx
+ 0000014F  BA 00000DD2 R     1		mov	edx,OFFSET ??0001
+ 00000154  E8 00000000 E     1		call	WriteString
+ 00000159  5A		     1		pop	edx
+ 0000015A  A0 00000D59 R			mov al, guessLetter
+ 0000015F  E8 00000000 E			call WriteChar
+ 00000164  E8 00000000 E			call Crlf                       ; new line
+						mWrite <"I repeat you one more time the letter what you guessed. ">
+ 00000DF5		     1		.data		
+ 00000DF5 49 20 72 65 70     1		??0002 BYTE "I repeat you one more time the letter what you guessed. ",0	
+	   65 61 74 20 79
+	   6F 75 20 6F 6E
+	   65 20 6D 6F 72
+	   65 20 74 69 6D
+	   65 20 74 68 65
+	   20 6C 65 74 74
+	   65 72 20 77 68
+	   61 74 20 79 6F
+	   75 20 67 75 65
+	   73 73 65 64 2E
+	   20 00
+ 00000169		     1		.code
+ 00000169  52		     1		push	edx
+ 0000016A  BA 00000DF5 R     1		mov	edx,OFFSET ??0002
+ 0000016F  E8 00000000 E     1		call	WriteString
+ 00000174  5A		     1		pop	edx
+ 00000175  E8 00000000 E			call Crlf                       ; new line
+						mWrite <"Guessed letter are: ">
+ 00000E2E		     1		.data		
+ 00000E2E 47 75 65 73 73     1		??0003 BYTE "Guessed letter are: ",0	
+	   65 64 20 6C 65
+	   74 74 65 72 20
+	   61 72 65 3A 20
+	   00
+ 0000017A		     1		.code
+ 0000017A  52		     1		push	edx
+ 0000017B  BA 00000E2E R     1		mov	edx,OFFSET ??0003
+ 00000180  E8 00000000 E     1		call	WriteString
+ 00000185  5A		     1		pop	edx
+ 00000186  BA 00000D8C R			mov edx, offset guessLetterArray
+ 0000018B  E8 00000000 E			call WriteString                ; write a string pointed to by EDX
+ 00000190  E8 00000000 E			call Crlf                       ; new line
+ 00000195  E8 00000000 E			call Crlf						; new line
+
+ 0000019A  B8 0000000F				mov  eax,white+(black*16)
+ 0000019F  E8 00000000 E			call SetTextColor
+
+ 000001A4  E9 FFFFFEC0				jmp again_input_world			; Guess next letter	
+
+ 000001A9			loop_take_live:
+
+ 000001A9  FF 0D 00000D3C R			dec statusGameLive
+ 000001AF  E9 FFFFFEB5				jmp again_input_world			; Guess next letter
+
+ 000001B4			restart_game:
+
+						INVOKE Str_trim, ADDR guessLetterArray, ','
+ 000001B4  6A 2C	   *	    push   +00000002Ch
+ 000001B6  68 00000D8C R   *	    push   OFFSET guessLetterArray
+ 000001BB  E8 00000000 E   *	    call   Str_trim
+
+ 000001C0  BA 00000D8C R			mov  edx, OFFSET guessLetterArray
+ 000001C5  E8 00000000 E			call StrLength				
+ 000001CA  A3 00000D55 R			mov  lengthArray, eax
+
+ 000001CF  BF 00000D8C R			mov edi, offset guessLetterArray ; Destination
+ 000001D4  03 3D 00000D55 R			add edi, lengthArray
+ 000001DA  4F					dec edi
+						;INVOKE Str_trim, ADDR guessLetterArray, guessLetter
+						INVOKE Str_trim, ADDR guessLetterArray, [edi]
+ 000001DB  8A 07	   *	    mov    al,  [edi]
+ 000001DD  50		   *	    push   eax
+ 000001DE  68 00000D8C R   *	    push   OFFSET guessLetterArray
+ 000001E3  E8 00000000 E   *	    call   Str_trim
+
+ 000001E8  81 FF 00000D8C R			cmp edi, offset guessLetterArray
+ 000001EE  75 C4				jne restart_game
+
+				  ;Return white color again
+ 000001F0  B8 0000000F				mov  eax,white+(black*16)
+ 000001F5  E8 00000000 E			call SetTextColor
+ 000001FA  E8 00000000 E			call Crlf			;new line
+
+ 000001FF  E9 FFFFFE08				jmp jump_game_start_again			; Guess next letter
+
+ 00000204			loop_game_win:
+					
+					mGotoxy 0, 15
+ 00000204  52		     1		push edx
+ 00000205  B6 0F	     1		mov  dh,15
+ 00000207  B2 00	     1		mov  dl,0
+ 00000209  E8 00000000 E     1		call Gotoxy
+ 0000020E  5A		     1		pop  edx
+						
+				  ; Write a string to the console:
+					INVOKE WriteConsole,
+						consoleHandle,				;console output handle
+						ADDR HANGMAN_GOODGAME_00,   ; string pointer
+						messageSizeGoodGame,		; string length
+						ADDR bytesWritten,			; returns num bytes written
+						0							; not used
+ 0000020F  6A 00	   *	    push   +000000000h
+ 00000211  68 000003E4 R   *	    push   OFFSET bytesWritten
+ 00000216  FF 35 00000481 R *	    push   messageSizeGoodGame
+ 0000021C  68 000003E8 R   *	    push   OFFSET HANGMAN_GOODGAME_00
+ 00000221  FF 35 000003E0 R *	    push   consoleHandle
+ 00000227  E8 00000000 E   *	    call   WriteConsoleA
+
+ 0000022C  B8 000003E8			mov eax, drowDelay
+ 00000231  E8 00000000 E		call Delay
+					mGotoxy 0, 15
+ 00000236  52		     1		push edx
+ 00000237  B6 0F	     1		mov  dh,15
+ 00000239  B2 00	     1		mov  dl,0
+ 0000023B  E8 00000000 E     1		call Gotoxy
+ 00000240  5A		     1		pop  edx
+ 00000241  B8 00000002			mov  eax,green+(black*16)
+ 00000246  E8 00000000 E	    call SetTextColor
+
+				  ; Write a string to the console:
+					INVOKE WriteConsole,
+						consoleHandle,				;console output handle
+						ADDR HANGMAN_GOODGAME_01,   ; string pointer
+						messageSizeGoodGame,		; string length
+						ADDR bytesWritten,			; returns num bytes written
+						0							; not used
+ 0000024B  6A 00	   *	    push   +000000000h
+ 0000024D  68 000003E4 R   *	    push   OFFSET bytesWritten
+ 00000252  FF 35 00000481 R *	    push   messageSizeGoodGame
+ 00000258  68 00000485 R   *	    push   OFFSET HANGMAN_GOODGAME_01
+ 0000025D  FF 35 000003E0 R *	    push   consoleHandle
+ 00000263  E8 00000000 E   *	    call   WriteConsoleA
+
+ 00000268  B8 000003E8			mov eax, drowDelay
+ 0000026D  E8 00000000 E		call Delay
+					mGotoxy 0, 15
+ 00000272  52		     1		push edx
+ 00000273  B6 0F	     1		mov  dh,15
+ 00000275  B2 00	     1		mov  dl,0
+ 00000277  E8 00000000 E     1		call Gotoxy
+ 0000027C  5A		     1		pop  edx
+ 0000027D  B8 0000000E			mov  eax,yellow+(black*16)
+ 00000282  E8 00000000 E	    call SetTextColor
+
+				  ; Write a string to the console:
+					INVOKE WriteConsole,
+						consoleHandle,				;console output handle
+						ADDR HANGMAN_GOODGAME_02,   ; string pointer
+						messageSizeGoodGame,		; string length
+						ADDR bytesWritten,			; returns num bytes written
+						0							; not used
+ 00000287  6A 00	   *	    push   +000000000h
+ 00000289  68 000003E4 R   *	    push   OFFSET bytesWritten
+ 0000028E  FF 35 00000481 R *	    push   messageSizeGoodGame
+ 00000294  68 0000051E R   *	    push   OFFSET HANGMAN_GOODGAME_02
+ 00000299  FF 35 000003E0 R *	    push   consoleHandle
+ 0000029F  E8 00000000 E   *	    call   WriteConsoleA
+
+ 000002A4  B8 000003E8			mov eax, drowDelay
+ 000002A9  E8 00000000 E		call Delay
+					mGotoxy 0, 15
+ 000002AE  52		     1		push edx
+ 000002AF  B6 0F	     1		mov  dh,15
+ 000002B1  B2 00	     1		mov  dl,0
+ 000002B3  E8 00000000 E     1		call Gotoxy
+ 000002B8  5A		     1		pop  edx
+ 000002B9  B8 00000003			mov  eax,cyan+(black*16)
+ 000002BE  E8 00000000 E	    call SetTextColor
+
+				  ; Write a string to the console:
+					INVOKE WriteConsole,
+						consoleHandle,				;console output handle
+						ADDR HANGMAN_GOODGAME_03,   ; string pointer
+						messageSizeGoodGame,		; string length
+						ADDR bytesWritten,			; returns num bytes written
+						0							; not used
+ 000002C3  6A 00	   *	    push   +000000000h
+ 000002C5  68 000003E4 R   *	    push   OFFSET bytesWritten
+ 000002CA  FF 35 00000481 R *	    push   messageSizeGoodGame
+ 000002D0  68 000005B7 R   *	    push   OFFSET HANGMAN_GOODGAME_03
+ 000002D5  FF 35 000003E0 R *	    push   consoleHandle
+ 000002DB  E8 00000000 E   *	    call   WriteConsoleA
+
+ 000002E0  B8 000003E8			mov eax, drowDelay
+ 000002E5  E8 00000000 E		call Delay
+					mGotoxy 0, 15
+ 000002EA  52		     1		push edx
+ 000002EB  B6 0F	     1		mov  dh,15
+ 000002ED  B2 00	     1		mov  dl,0
+ 000002EF  E8 00000000 E     1		call Gotoxy
+ 000002F4  5A		     1		pop  edx
+ 000002F5  B8 00000004			mov  eax,red+(black*16)
+ 000002FA  E8 00000000 E	    call SetTextColor
+					
+ 000002FF  FE 0D 00000DC0 R		dec var_loop
+ 00000305  80 3D 00000DC0 R		cmp var_loop, 0
+	   00
+ 0000030C  0F 85 FFFFFEF2		jne loop_game_win
+
+				  ;restar game after 4*15sekunds
+ 00000312  E9 FFFFFCF5			jmp jump_game_start_again		
+					
+					
+ 00000317			loop_game_over:
+					
+					mGotoxy 0, 15
+ 00000317  52		     1		push edx
+ 00000318  B6 0F	     1		mov  dh,15
+ 0000031A  B2 00	     1		mov  dl,0
+ 0000031C  E8 00000000 E     1		call Gotoxy
+ 00000321  5A		     1		pop  edx
+						
+				  ; Write a string to the console:
+					INVOKE WriteConsole,
+						consoleHandle,				;console output handle
+						ADDR HANGMAN_GAMEOVER_00,   ; string pointer
+						messageSizeGoodGame,		; string length
+						ADDR bytesWritten,			; returns num bytes written
+						0							; not used
+ 00000322  6A 00	   *	    push   +000000000h
+ 00000324  68 000003E4 R   *	    push   OFFSET bytesWritten
+ 00000329  FF 35 00000481 R *	    push   messageSizeGoodGame
+ 0000032F  68 00000650 R   *	    push   OFFSET HANGMAN_GAMEOVER_00
+ 00000334  FF 35 000003E0 R *	    push   consoleHandle
+ 0000033A  E8 00000000 E   *	    call   WriteConsoleA
+
+ 0000033F  B8 000003E8			mov eax, drowDelay
+ 00000344  E8 00000000 E		call Delay
+					mGotoxy 0, 15
+ 00000349  52		     1		push edx
+ 0000034A  B6 0F	     1		mov  dh,15
+ 0000034C  B2 00	     1		mov  dl,0
+ 0000034E  E8 00000000 E     1		call Gotoxy
+ 00000353  5A		     1		pop  edx
+ 00000354  B8 00000002			mov  eax,green+(black*16)
+ 00000359  E8 00000000 E	    call SetTextColor
+
+				  ; Write a string to the console:
+					INVOKE WriteConsole,
+						consoleHandle,				;console output handle
+						ADDR HANGMAN_GAMEOVER_01,   ; string pointer
+						messageSizeGoodGame,		; string length
+						ADDR bytesWritten,			; returns num bytes written
+						0							; not used
+ 0000035E  6A 00	   *	    push   +000000000h
+ 00000360  68 000003E4 R   *	    push   OFFSET bytesWritten
+ 00000365  FF 35 00000481 R *	    push   messageSizeGoodGame
+ 0000036B  68 000006E9 R   *	    push   OFFSET HANGMAN_GAMEOVER_01
+ 00000370  FF 35 000003E0 R *	    push   consoleHandle
+ 00000376  E8 00000000 E   *	    call   WriteConsoleA
+
+ 0000037B  B8 000003E8			mov eax, drowDelay
+ 00000380  E8 00000000 E		call Delay
+					mGotoxy 0, 15
+ 00000385  52		     1		push edx
+ 00000386  B6 0F	     1		mov  dh,15
+ 00000388  B2 00	     1		mov  dl,0
+ 0000038A  E8 00000000 E     1		call Gotoxy
+ 0000038F  5A		     1		pop  edx
+ 00000390  B8 0000000E			mov  eax,yellow+(black*16)
+ 00000395  E8 00000000 E	    call SetTextColor
+
+				  ; Write a string to the console:
+					INVOKE WriteConsole,
+						consoleHandle,				;console output handle
+						ADDR HANGMAN_GAMEOVER_02,   ; string pointer
+						messageSizeGoodGame,		; string length
+						ADDR bytesWritten,			; returns num bytes written
+						0							; not used
+ 0000039A  6A 00	   *	    push   +000000000h
+ 0000039C  68 000003E4 R   *	    push   OFFSET bytesWritten
+ 000003A1  FF 35 00000481 R *	    push   messageSizeGoodGame
+ 000003A7  68 00000782 R   *	    push   OFFSET HANGMAN_GAMEOVER_02
+ 000003AC  FF 35 000003E0 R *	    push   consoleHandle
+ 000003B2  E8 00000000 E   *	    call   WriteConsoleA
+
+ 000003B7  B8 000003E8			mov eax, drowDelay
+ 000003BC  E8 00000000 E		call Delay
+					mGotoxy 0, 15
+ 000003C1  52		     1		push edx
+ 000003C2  B6 0F	     1		mov  dh,15
+ 000003C4  B2 00	     1		mov  dl,0
+ 000003C6  E8 00000000 E     1		call Gotoxy
+ 000003CB  5A		     1		pop  edx
+ 000003CC  B8 00000003			mov  eax,cyan+(black*16)
+ 000003D1  E8 00000000 E	    call SetTextColor
+
+				  ; Write a string to the console:
+					INVOKE WriteConsole,
+						consoleHandle,				;console output handle
+						ADDR HANGMAN_GAMEOVER_03,   ; string pointer
+						messageSizeGoodGame,		; string length
+						ADDR bytesWritten,			; returns num bytes written
+						0							; not used
+ 000003D6  6A 00	   *	    push   +000000000h
+ 000003D8  68 000003E4 R   *	    push   OFFSET bytesWritten
+ 000003DD  FF 35 00000481 R *	    push   messageSizeGoodGame
+ 000003E3  68 0000081B R   *	    push   OFFSET HANGMAN_GAMEOVER_03
+ 000003E8  FF 35 000003E0 R *	    push   consoleHandle
+ 000003EE  E8 00000000 E   *	    call   WriteConsoleA
+
+ 000003F3  B8 000003E8			mov eax, drowDelay
+ 000003F8  E8 00000000 E		call Delay
+					mGotoxy 0, 15
+ 000003FD  52		     1		push edx
+ 000003FE  B6 0F	     1		mov  dh,15
+ 00000400  B2 00	     1		mov  dl,0
+ 00000402  E8 00000000 E     1		call Gotoxy
+ 00000407  5A		     1		pop  edx
+ 00000408  B8 00000004			mov  eax,red+(black*16)
+ 0000040D  E8 00000000 E	    call SetTextColor
+					
+ 00000412  FE 0D 00000DC0 R		dec var_loop
+ 00000418  80 3D 00000DC0 R		cmp var_loop, 0
+	   00
+ 0000041F  0F 85 FFFFFEF2		jne loop_game_over
+
+				  ;restar game after 4*15sekunds
+ 00000425  B8 0000000F			mov  eax,white+(black*16)
+ 0000042A  E8 00000000 E	    call SetTextColor
+ 0000042F  E9 FFFFFBD8			jmp jump_game_start_again				
+
+
+ 00000434			main ENDP
+
+ 00000434			find_str PROC					; ARG: EDX = index
+ 00000434  8D 3D 00000CE7 R	    lea edi, manyWords          ; Address of string list
+
+ 0000043A  B9 00000055		    mov ecx, len                ; Maximal number of bytes to scan
+ 0000043F  32 C0		    xor al, al                  ; Scan for 0
+
+ 00000441			    @@:
+ 00000441  83 EA 01		    sub edx, 1					
+ 00000444  72 04		    jc done                     ; No index left to scan = string found
+ 00000446  F2/ AE		    repne scasb                 ; Scan for AL
+ 00000448  EB F7		    jmp @B                      ; Next string
+
+ 0000044A			  done:
+ 0000044A  C3				ret
+
+ 0000044B			find_str ENDP                   ; RESULT: EDI pointer to string[edx]
+
+ 0000044B			make_array_dash PROC     
+ 0000044B  BA 00000D40 R		mov  edx,OFFSET selectedWords
+ 00000450  E8 00000000 E	    call StrLength              ; Length of a null-terminated string pointed to by EDX
+ 00000455  A3 00000D55 R	    mov  lengthArray,eax
+
+ 0000045A  B0 2D		    mov al, '-'                 ; Default charcter for guessWords
+ 0000045C  8B 0D 00000D55 R	    mov ecx, lengthArray		; REP counter
+ 00000462  BF 00000D5A R	    mov edi, offset guessWords  ; Destination
+ 00000467  F3/ AA		    rep stosb                   ; Build guessWords
+ 00000469  C6 07 00		    mov BYTE PTR [edi], 0       ; Store the null termination
+
+ 0000046C  C3			    ret
+ 0000046D			make_array_dash ENDP  
+
+ 0000046D			make_array_guess_letter PROC     
+ 0000046D  BA 00000D8C R		mov  edx, OFFSET guessLetterArray
+ 00000472  E8 00000000 E	    call StrLength				; Length of a null-terminated string pointed to by EDX
+ 00000477  A3 00000D55 R	    mov  lengthArray, eax
+
+ 0000047C  BF 00000D8C R	    mov edi, offset guessLetterArray ; Destination
+ 00000481  03 3D 00000D55 R	    add edi, lengthArray
+ 00000487  A0 00000D59 R		mov al, guessLetter
+ 0000048C  88 07			mov BYTE PTR [edi], al      ; Store guessLetter
+ 0000048E  47				inc edi
+ 0000048F  C6 07 2C			mov BYTE PTR [edi], ','     ; Store the null termination
+
+ 00000492  C3			    ret
+ 00000493			make_array_guess_letter ENDP  
+
+ 00000493			print_hangman_live PROC  
+
+ 00000493  A1 00000D3C R		mov eax, statusGameLive
+
+ 00000498  83 F8 06			cmp eax, 6
+ 0000049B  74 36			je live_6
+ 0000049D  83 F8 05			cmp eax, 5
+ 000004A0  0F 84 00000089		je live_5
+ 000004A6  83 F8 04			cmp eax, 4
+ 000004A9  0F 84 000000DC		je live_4
+ 000004AF  83 F8 03			cmp eax, 3
+ 000004B2  0F 84 0000012F		je live_3
+ 000004B8  83 F8 02			cmp eax, 2
+ 000004BB  0F 84 00000182		je live_2
+ 000004C1  83 F8 01			cmp eax, 1
+ 000004C4  0F 84 000001D5		je live_1
+ 000004CA  83 F8 00			cmp eax, 0
+ 000004CD  0F 84 00000228		je live_0
+
+ 000004D3			live_6:	  ; Write a string to the console:
+					INVOKE WriteConsole,
+						consoleHandle,				; console output handle
+						ADDR HANGMAN_LIVES_06,      ; string pointer
+						messageSizeGoodGame,		; string length
+						ADDR bytesWritten,			; returns num bytes written
+						0							; not used
+ 000004D3  6A 00	   *	    push   +000000000h
+ 000004D5  68 000003E4 R   *	    push   OFFSET bytesWritten
+ 000004DA  FF 35 00000481 R *	    push   messageSizeGoodGame
+ 000004E0  68 000008B4 R   *	    push   OFFSET HANGMAN_LIVES_06
+ 000004E5  FF 35 000003E0 R *	    push   consoleHandle
+ 000004EB  E8 00000000 E   *	    call   WriteConsoleA
+ 000004F0  E8 00000000 E		call Crlf						; new line
+ 000004F5  E8 00000000 E		call Crlf						; new line
+ 000004FA  BA 00000D5A R		mov edx, offset guessWords
+ 000004FF  E8 00000000 E		call WriteString                ; write a string pointed to by EDX
+ 00000504  E8 00000000 E		call Crlf                       ; new line
+ 00000509  E8 00000000 E		call Crlf						; new line
+					mWrite <"Guessed letter are: ">
+ 00000E43		     1		.data		
+ 00000E43 47 75 65 73 73     1		??0004 BYTE "Guessed letter are: ",0	
+	   65 64 20 6C 65
+	   74 74 65 72 20
+	   61 72 65 3A 20
+	   00
+ 0000050E		     1		.code
+ 0000050E  52		     1		push	edx
+ 0000050F  BA 00000E43 R     1		mov	edx,OFFSET ??0004
+ 00000514  E8 00000000 E     1		call	WriteString
+ 00000519  5A		     1		pop	edx
+ 0000051A  BA 00000D8C R		mov edx, offset guessLetterArray
+ 0000051F  E8 00000000 E		call WriteString                ; write a string pointed to by EDX
+ 00000524  E8 00000000 E		call Crlf                       ; new line
+ 00000529  E8 00000000 E		call Crlf                       ; new line
+ 0000052E  C3				ret
+
+ 0000052F			live_5:   ; Write a string to the console:
+					INVOKE WriteConsole,
+						consoleHandle,				;console output handle
+						ADDR HANGMAN_LIVES_05,      ; string pointer
+						messageSizeGoodGame,		; string length
+						ADDR bytesWritten,			; returns num bytes written
+						0							; not used
+ 0000052F  6A 00	   *	    push   +000000000h
+ 00000531  68 000003E4 R   *	    push   OFFSET bytesWritten
+ 00000536  FF 35 00000481 R *	    push   messageSizeGoodGame
+ 0000053C  68 0000094D R   *	    push   OFFSET HANGMAN_LIVES_05
+ 00000541  FF 35 000003E0 R *	    push   consoleHandle
+ 00000547  E8 00000000 E   *	    call   WriteConsoleA
+ 0000054C  E8 00000000 E		call Crlf						; new line
+ 00000551  E8 00000000 E		call Crlf						; new line
+ 00000556  BA 00000D5A R		mov edx, offset guessWords
+ 0000055B  E8 00000000 E		call WriteString                ; write a string pointed to by EDX
+ 00000560  E8 00000000 E		call Crlf                       ; new line
+ 00000565  E8 00000000 E		call Crlf						; new line
+					mWrite <"Guessed letter are: ">
+ 00000E58		     1		.data		
+ 00000E58 47 75 65 73 73     1		??0005 BYTE "Guessed letter are: ",0	
+	   65 64 20 6C 65
+	   74 74 65 72 20
+	   61 72 65 3A 20
+	   00
+ 0000056A		     1		.code
+ 0000056A  52		     1		push	edx
+ 0000056B  BA 00000E58 R     1		mov	edx,OFFSET ??0005
+ 00000570  E8 00000000 E     1		call	WriteString
+ 00000575  5A		     1		pop	edx
+ 00000576  BA 00000D8C R		mov edx, offset guessLetterArray
+ 0000057B  E8 00000000 E		call WriteString                ; write a string pointed to by EDX
+ 00000580  E8 00000000 E		call Crlf                       ; new line
+ 00000585  E8 00000000 E		call Crlf                       ; new line
+ 0000058A  C3				ret
+
+ 0000058B			live_4:   ; Write a string to the console:
+					INVOKE WriteConsole,
+						consoleHandle,				;console output handle
+						ADDR HANGMAN_LIVES_04,      ; string pointer
+						messageSizeGoodGame,		; string length
+						ADDR bytesWritten,			; returns num bytes written
+						0							; not used
+ 0000058B  6A 00	   *	    push   +000000000h
+ 0000058D  68 000003E4 R   *	    push   OFFSET bytesWritten
+ 00000592  FF 35 00000481 R *	    push   messageSizeGoodGame
+ 00000598  68 000009E6 R   *	    push   OFFSET HANGMAN_LIVES_04
+ 0000059D  FF 35 000003E0 R *	    push   consoleHandle
+ 000005A3  E8 00000000 E   *	    call   WriteConsoleA
+ 000005A8  E8 00000000 E		call Crlf						; new line
+ 000005AD  E8 00000000 E		call Crlf						; new line
+ 000005B2  BA 00000D5A R		mov edx, offset guessWords
+ 000005B7  E8 00000000 E		call WriteString                ; write a string pointed to by EDX
+ 000005BC  E8 00000000 E		call Crlf                       ; new line
+ 000005C1  E8 00000000 E		call Crlf						; new line
+					mWrite <"Guessed letter are: ">
+ 00000E6D		     1		.data		
+ 00000E6D 47 75 65 73 73     1		??0006 BYTE "Guessed letter are: ",0	
+	   65 64 20 6C 65
+	   74 74 65 72 20
+	   61 72 65 3A 20
+	   00
+ 000005C6		     1		.code
+ 000005C6  52		     1		push	edx
+ 000005C7  BA 00000E6D R     1		mov	edx,OFFSET ??0006
+ 000005CC  E8 00000000 E     1		call	WriteString
+ 000005D1  5A		     1		pop	edx
+ 000005D2  BA 00000D8C R		mov edx, offset guessLetterArray
+ 000005D7  E8 00000000 E		call WriteString                ; write a string pointed to by EDX
+ 000005DC  E8 00000000 E		call Crlf                       ; new line
+ 000005E1  E8 00000000 E		call Crlf                       ; new line
+ 000005E6  C3				ret
+
+ 000005E7			live_3:   ; Write a string to the console:
+					INVOKE WriteConsole,
+						consoleHandle,				;console output handle
+						ADDR HANGMAN_LIVES_03,      ; string pointer
+						messageSizeGoodGame,		; string length
+						ADDR bytesWritten,			; returns num bytes written
+						0							; not used
+ 000005E7  6A 00	   *	    push   +000000000h
+ 000005E9  68 000003E4 R   *	    push   OFFSET bytesWritten
+ 000005EE  FF 35 00000481 R *	    push   messageSizeGoodGame
+ 000005F4  68 00000A7F R   *	    push   OFFSET HANGMAN_LIVES_03
+ 000005F9  FF 35 000003E0 R *	    push   consoleHandle
+ 000005FF  E8 00000000 E   *	    call   WriteConsoleA
+ 00000604  E8 00000000 E		call Crlf						; new line
+ 00000609  E8 00000000 E		call Crlf						; new line
+ 0000060E  BA 00000D5A R		mov edx, offset guessWords
+ 00000613  E8 00000000 E		call WriteString                ; write a string pointed to by EDX
+ 00000618  E8 00000000 E		call Crlf                       ; new line
+ 0000061D  E8 00000000 E		call Crlf						; new line
+					mWrite <"Guessed letter are: ">
+ 00000E82		     1		.data		
+ 00000E82 47 75 65 73 73     1		??0007 BYTE "Guessed letter are: ",0	
+	   65 64 20 6C 65
+	   74 74 65 72 20
+	   61 72 65 3A 20
+	   00
+ 00000622		     1		.code
+ 00000622  52		     1		push	edx
+ 00000623  BA 00000E82 R     1		mov	edx,OFFSET ??0007
+ 00000628  E8 00000000 E     1		call	WriteString
+ 0000062D  5A		     1		pop	edx
+ 0000062E  BA 00000D8C R		mov edx, offset guessLetterArray
+ 00000633  E8 00000000 E		call WriteString                ; write a string pointed to by EDX
+ 00000638  E8 00000000 E		call Crlf                       ; new line
+ 0000063D  E8 00000000 E		call Crlf                       ; new line
+ 00000642  C3				ret
+
+ 00000643			live_2:   ; Write a string to the console:
+					INVOKE WriteConsole,
+						consoleHandle,				;console output handle
+						ADDR HANGMAN_LIVES_02,      ; string pointer
+						messageSizeGoodGame,		; string length
+						ADDR bytesWritten,			; returns num bytes written
+						0							; not used
+ 00000643  6A 00	   *	    push   +000000000h
+ 00000645  68 000003E4 R   *	    push   OFFSET bytesWritten
+ 0000064A  FF 35 00000481 R *	    push   messageSizeGoodGame
+ 00000650  68 00000B18 R   *	    push   OFFSET HANGMAN_LIVES_02
+ 00000655  FF 35 000003E0 R *	    push   consoleHandle
+ 0000065B  E8 00000000 E   *	    call   WriteConsoleA
+ 00000660  E8 00000000 E		call Crlf						; new line
+ 00000665  E8 00000000 E		call Crlf						; new line
+ 0000066A  BA 00000D5A R		mov edx, offset guessWords
+ 0000066F  E8 00000000 E		call WriteString                ; write a string pointed to by EDX
+ 00000674  E8 00000000 E		call Crlf                       ; new line
+ 00000679  E8 00000000 E		call Crlf						; new line
+					mWrite <"Guessed letter are: ">
+ 00000E97		     1		.data		
+ 00000E97 47 75 65 73 73     1		??0008 BYTE "Guessed letter are: ",0	
+	   65 64 20 6C 65
+	   74 74 65 72 20
+	   61 72 65 3A 20
+	   00
+ 0000067E		     1		.code
+ 0000067E  52		     1		push	edx
+ 0000067F  BA 00000E97 R     1		mov	edx,OFFSET ??0008
+ 00000684  E8 00000000 E     1		call	WriteString
+ 00000689  5A		     1		pop	edx
+ 0000068A  BA 00000D8C R		mov edx, offset guessLetterArray
+ 0000068F  E8 00000000 E		call WriteString                ; write a string pointed to by EDX
+ 00000694  E8 00000000 E		call Crlf                       ; new line
+ 00000699  E8 00000000 E		call Crlf                       ; new line
+ 0000069E  C3				ret
+
+ 0000069F			live_1:   ; Write a string to the console:
+					INVOKE WriteConsole,
+						consoleHandle,				;console output handle
+						ADDR HANGMAN_LIVES_01,      ; string pointer
+						messageSizeGoodGame,		; string length
+						ADDR bytesWritten,			; returns num bytes written
+						0							; not used
+ 0000069F  6A 00	   *	    push   +000000000h
+ 000006A1  68 000003E4 R   *	    push   OFFSET bytesWritten
+ 000006A6  FF 35 00000481 R *	    push   messageSizeGoodGame
+ 000006AC  68 00000BB1 R   *	    push   OFFSET HANGMAN_LIVES_01
+ 000006B1  FF 35 000003E0 R *	    push   consoleHandle
+ 000006B7  E8 00000000 E   *	    call   WriteConsoleA
+ 000006BC  E8 00000000 E		call Crlf						; new line
+ 000006C1  E8 00000000 E		call Crlf						; new line
+ 000006C6  BA 00000D5A R		mov edx, offset guessWords
+ 000006CB  E8 00000000 E		call WriteString                ; write a string pointed to by EDX
+ 000006D0  E8 00000000 E		call Crlf                       ; new line
+ 000006D5  E8 00000000 E		call Crlf						; new line
+					mWrite <"Guessed letter are: ">
+ 00000EAC		     1		.data		
+ 00000EAC 47 75 65 73 73     1		??0009 BYTE "Guessed letter are: ",0	
+	   65 64 20 6C 65
+	   74 74 65 72 20
+	   61 72 65 3A 20
+	   00
+ 000006DA		     1		.code
+ 000006DA  52		     1		push	edx
+ 000006DB  BA 00000EAC R     1		mov	edx,OFFSET ??0009
+ 000006E0  E8 00000000 E     1		call	WriteString
+ 000006E5  5A		     1		pop	edx
+ 000006E6  BA 00000D8C R		mov edx, offset guessLetterArray
+ 000006EB  E8 00000000 E		call WriteString                ; write a string pointed to by EDX
+ 000006F0  E8 00000000 E		call Crlf                       ; new line
+ 000006F5  E8 00000000 E		call Crlf                       ; new line
+ 000006FA  C3				ret
+
+ 000006FB			live_0:   ; Write a string to the console:
+					INVOKE WriteConsole,
+						consoleHandle,				;console output handle
+						ADDR HANGMAN_LIVES_00,      ; string pointer
+						messageSizeGoodGame,		; string length
+						ADDR bytesWritten,			; returns num bytes written
+						0							; not used
+ 000006FB  6A 00	   *	    push   +000000000h
+ 000006FD  68 000003E4 R   *	    push   OFFSET bytesWritten
+ 00000702  FF 35 00000481 R *	    push   messageSizeGoodGame
+ 00000708  68 00000C4A R   *	    push   OFFSET HANGMAN_LIVES_00
+ 0000070D  FF 35 000003E0 R *	    push   consoleHandle
+ 00000713  E8 00000000 E   *	    call   WriteConsoleA
+ 00000718  E8 00000000 E		call Crlf						; new line
+ 0000071D  E8 00000000 E		call Crlf						; new line
+ 00000722  BA 00000D5A R		mov edx, offset guessWords
+ 00000727  E8 00000000 E		call WriteString                ; write a string pointed to by EDX
+ 0000072C  E8 00000000 E		call Crlf                       ; new line
+ 00000731  E8 00000000 E		call Crlf						; new line
+					mWrite <"Guessed letter are: ">
+ 00000EC1		     1		.data		
+ 00000EC1 47 75 65 73 73     1		??000A BYTE "Guessed letter are: ",0	
+	   65 64 20 6C 65
+	   74 74 65 72 20
+	   61 72 65 3A 20
+	   00
+ 00000736		     1		.code
+ 00000736  52		     1		push	edx
+ 00000737  BA 00000EC1 R     1		mov	edx,OFFSET ??000A
+ 0000073C  E8 00000000 E     1		call	WriteString
+ 00000741  5A		     1		pop	edx
+ 00000742  BA 00000D8C R		mov edx, offset guessLetterArray
+ 00000747  E8 00000000 E		call WriteString                ; write a string pointed to by EDX
+ 0000074C  E8 00000000 E		call Crlf                       ; new line
+ 00000751  E8 00000000 E		call Crlf                       ; new line
+ 00000756  C3				ret
+						
+ 00000757			print_hangman_live ENDP  
+
+				END main
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    06/09/17 18:06:36
+AddTwo.asm						     Symbols 2 - 1
+
+
+
+
+Macros:
+
+                N a m e                 Type
+
+IsDefined  . . . . . . . . . . .	Func
+Startup  . . . . . . . . . . . .	Proc
+mDumpMem . . . . . . . . . . . .	Proc
+mDump  . . . . . . . . . . . . .	Proc
+mGotoxy  . . . . . . . . . . . .	Proc
+mReadString  . . . . . . . . . .	Proc
+mShowRegister  . . . . . . . . .	Proc
+mShow  . . . . . . . . . . . . .	Proc
+mWriteLn . . . . . . . . . . . .	Proc
+mWriteSpace  . . . . . . . . . .	Proc
+mWriteString . . . . . . . . . .	Proc
+mWrite . . . . . . . . . . . . .	Proc
+
+
+Structures and Unions:
+
+                N a m e                  Size
+                                         Offset      Type
+
+CONSOLE_CURSOR_INFO  . . . . . .	 00000008
+  dwSize . . . . . . . . . . . .	 00000000	 DWord
+  bVisible . . . . . . . . . . .	 00000004	 DWord
+CONSOLE_SCREEN_BUFFER_INFO . . .	 00000016
+  dwSize . . . . . . . . . . . .	 00000000	 DWord
+  dwCursorPosition . . . . . . .	 00000004	 DWord
+  wAttributes  . . . . . . . . .	 00000008	 Word
+  srWindow . . . . . . . . . . .	 0000000A	 QWord
+  dwMaximumWindowSize  . . . . .	 00000012	 DWord
+COORD  . . . . . . . . . . . . .	 00000004
+  X  . . . . . . . . . . . . . .	 00000000	 Word
+  Y  . . . . . . . . . . . . . .	 00000002	 Word
+FILETIME . . . . . . . . . . . .	 00000008
+  loDateTime . . . . . . . . . .	 00000000	 DWord
+  hiDateTime . . . . . . . . . .	 00000004	 DWord
+FOCUS_EVENT_RECORD . . . . . . .	 00000004
+  bSetFocus  . . . . . . . . . .	 00000000	 DWord
+FPU_ENVIRON  . . . . . . . . . .	 0000001C
+  controlWord  . . . . . . . . .	 00000000	 Word
+  statusWord . . . . . . . . . .	 00000004	 Word
+  tagWord  . . . . . . . . . . .	 00000008	 Word
+  instrPointerOffset . . . . . .	 0000000C	 DWord
+  instrPointerSelector . . . . .	 00000010	 DWord
+  operandPointerOffset . . . . .	 00000014	 DWord
+  operandPointerSelector . . . .	 00000018	 Word
+INPUT_RECORD . . . . . . . . . .	 00000014
+  EventType  . . . . . . . . . .	 00000000	 Word
+  Event  . . . . . . . . . . . .	 00000004	 XmmWord
+  bKeyDown . . . . . . . . . . .	 00000000	 DWord
+  wRepeatCount . . . . . . . . .	 00000004	 Word
+  wVirtualKeyCode  . . . . . . .	 00000006	 Word
+  wVirtualScanCode . . . . . . .	 00000008	 Word
+  uChar  . . . . . . . . . . . .	 0000000A	 Word
+  UnicodeChar  . . . . . . . . .	 00000000	 Word
+  AsciiChar  . . . . . . . . . .	 00000000	 Byte
+  dwControlKeyState  . . . . . .	 0000000C	 DWord
+  dwMousePosition  . . . . . . .	 00000000	 DWord
+  dwButtonState  . . . . . . . .	 00000004	 DWord
+  dwMouseControlKeyState . . . .	 00000008	 DWord
+  dwEventFlags . . . . . . . . .	 0000000C	 DWord
+  dwSize . . . . . . . . . . . .	 00000000	 DWord
+  dwCommandId  . . . . . . . . .	 00000000	 DWord
+  bSetFocus  . . . . . . . . . .	 00000000	 DWord
+KEY_EVENT_RECORD . . . . . . . .	 00000010
+  bKeyDown . . . . . . . . . . .	 00000000	 DWord
+  wRepeatCount . . . . . . . . .	 00000004	 Word
+  wVirtualKeyCode  . . . . . . .	 00000006	 Word
+  wVirtualScanCode . . . . . . .	 00000008	 Word
+  uChar  . . . . . . . . . . . .	 0000000A	 Word
+  UnicodeChar  . . . . . . . . .	 00000000	 Word
+  AsciiChar  . . . . . . . . . .	 00000000	 Byte
+  dwControlKeyState  . . . . . .	 0000000C	 DWord
+MENU_EVENT_RECORD  . . . . . . .	 00000004
+  dwCommandId  . . . . . . . . .	 00000000	 DWord
+MOUSE_EVENT_RECORD . . . . . . .	 00000010
+  dwMousePosition  . . . . . . .	 00000000	 DWord
+  dwButtonState  . . . . . . . .	 00000004	 DWord
+  dwMouseControlKeyState . . . .	 00000008	 DWord
+  dwEventFlags . . . . . . . . .	 0000000C	 DWord
+SMALL_RECT . . . . . . . . . . .	 00000008
+  Left . . . . . . . . . . . . .	 00000000	 Word
+  Top  . . . . . . . . . . . . .	 00000002	 Word
+  Right  . . . . . . . . . . . .	 00000004	 Word
+  Bottom . . . . . . . . . . . .	 00000006	 Word
+SYSTEMTIME . . . . . . . . . . .	 00000010
+  wYear  . . . . . . . . . . . .	 00000000	 Word
+  wMonth . . . . . . . . . . . .	 00000002	 Word
+  wDayOfWeek . . . . . . . . . .	 00000004	 Word
+  wDay . . . . . . . . . . . . .	 00000006	 Word
+  wHour  . . . . . . . . . . . .	 00000008	 Word
+  wMinute  . . . . . . . . . . .	 0000000A	 Word
+  wSecond  . . . . . . . . . . .	 0000000C	 Word
+  wMilliseconds  . . . . . . . .	 0000000E	 Word
+WINDOW_BUFFER_SIZE_RECORD  . . .	 00000004
+  dwSize . . . . . . . . . . . .	 00000000	 DWord
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000ED6 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000757 Para	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+CloseFile  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+CloseHandle  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+Clrscr . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+CreateFileA  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+CreateOutputFile . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+Crlf . . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+Delay  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+DumpMem  . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+DumpRegs . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+ExitProcess  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+FileTimeToDosDateTime  . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+FileTimeToSystemTime . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+FlushConsoleInputBuffer  . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+FormatMessageA . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetCommandLineA  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetCommandTail . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetConsoleCP . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetConsoleCursorInfo . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetConsoleMode . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetConsoleScreenBufferInfo . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetDateTime  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetFileTime  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetKeyState  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetLastError . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetLocalTime . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetMaxXY . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetMseconds  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetNumberOfConsoleInputEvents  .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetProcessHeap . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetStdHandle . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetSystemTime  . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetTextColor . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+GetTickCount . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+Gotoxy . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+HeapAlloc  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+HeapCreate . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+HeapDestroy  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+HeapFree . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+HeapSize . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+IsDigit  . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+LocalFree  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+MessageBoxA  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+MsgBoxAsk  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+MsgBox . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+OpenInputFile  . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+ParseDecimal32 . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+ParseInteger32 . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+PeekConsoleInputA  . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+Random32 . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+RandomRange  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+Randomize  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+ReadChar . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+ReadConsoleA . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+ReadConsoleInputA  . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+ReadDec  . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+ReadFile . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+ReadFloat  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+ReadFromFile . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+ReadHex  . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+ReadInt  . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+ReadKeyFlush . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+ReadKey  . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+ReadString . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+SetConsoleCursorInfo . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+SetConsoleCursorPosition . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+SetConsoleMode . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+SetConsoleScreenBufferSize . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+SetConsoleTextAttribute  . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+SetConsoleTitleA . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+SetConsoleWindowInfo . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+SetFilePointer . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+SetLocalTime . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+SetTextColor . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+ShowFPUStack . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+Sleep  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+StrLength  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+Str_compare  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+Str_copy . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+Str_length . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+Str_trim . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+Str_ucase  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+SystemTimeToFileTime . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WaitMsg  . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WriteBinB  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WriteBin . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WriteChar  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WriteConsoleA  . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WriteConsoleOutputAttribute  . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WriteConsoleOutputCharacterA . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WriteDec . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WriteFile  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WriteFloat . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WriteHexB  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WriteHex . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WriteInt . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WriteStackFrameName  . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+find_str . . . . . . . . . . . .	P Near	 00000434 _TEXT	Length= 00000017 Public STDCALL
+  done . . . . . . . . . . . . .	L Near	 0000044A _TEXT	
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000434 Public STDCALL
+  jump_game_start_again  . . . .	L Near	 0000000C _TEXT	
+  again_input_world  . . . . . .	L Near	 00000069 _TEXT	
+  uppercase  . . . . . . . . . .	L Near	 000000B1 _TEXT	
+  ride_hard_loop . . . . . . . .	L Near	 00000115 _TEXT	
+  exit_main  . . . . . . . . . .	L Near	 0000013D _TEXT	
+  loop_guess_letter_exists . . .	L Near	 00000144 _TEXT	
+  loop_take_live . . . . . . . .	L Near	 000001A9 _TEXT	
+  restart_game . . . . . . . . .	L Near	 000001B4 _TEXT	
+  loop_game_win  . . . . . . . .	L Near	 00000204 _TEXT	
+  loop_game_over . . . . . . . .	L Near	 00000317 _TEXT	
+make_array_dash  . . . . . . . .	P Near	 0000044B _TEXT	Length= 00000022 Public STDCALL
+make_array_guess_letter  . . . .	P Near	 0000046D _TEXT	Length= 00000026 Public STDCALL
+print_hangman_live . . . . . . .	P Near	 00000493 _TEXT	Length= 000002C4 Public STDCALL
+  live_6 . . . . . . . . . . . .	L Near	 000004D3 _TEXT	
+  live_5 . . . . . . . . . . . .	L Near	 0000052F _TEXT	
+  live_4 . . . . . . . . . . . .	L Near	 0000058B _TEXT	
+  live_3 . . . . . . . . . . . .	L Near	 000005E7 _TEXT	
+  live_2 . . . . . . . . . . . .	L Near	 00000643 _TEXT	
+  live_1 . . . . . . . . . . . .	L Near	 0000069F _TEXT	
+  live_0 . . . . . . . . . . . .	L Near	 000006FB _TEXT	
+printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
+scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
+wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+??0000 . . . . . . . . . . . . .	Byte	 00000DC1 _DATA	
+??0001 . . . . . . . . . . . . .	Byte	 00000DD2 _DATA	
+??0002 . . . . . . . . . . . . .	Byte	 00000DF5 _DATA	
+??0003 . . . . . . . . . . . . .	Byte	 00000E2E _DATA	
+??0004 . . . . . . . . . . . . .	Byte	 00000E43 _DATA	
+??0005 . . . . . . . . . . . . .	Byte	 00000E58 _DATA	
+??0006 . . . . . . . . . . . . .	Byte	 00000E6D _DATA	
+??0007 . . . . . . . . . . . . .	Byte	 00000E82 _DATA	
+??0008 . . . . . . . . . . . . .	Byte	 00000E97 _DATA	
+??0009 . . . . . . . . . . . . .	Byte	 00000EAC _DATA	
+??000A . . . . . . . . . . . . .	Byte	 00000EC1 _DATA	
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000003h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+ALT_MASK . . . . . . . . . . . .	Number	 00000003h   
+CAPSLOCK_ON  . . . . . . . . . .	Number	 00000080h   
+CREATE_ALWAYS  . . . . . . . . .	Number	 00000002h   
+CREATE_NEW . . . . . . . . . . .	Number	 00000001h   
+CTRL_MASK  . . . . . . . . . . .	Number	 0000000Ch   
+CreateFile . . . . . . . . . . .	Text   	 CreateFileA
+DO_NOT_SHARE . . . . . . . . . .	Number	 00000000h   
+ENABLE_ECHO_INPUT  . . . . . . .	Number	 00000004h   
+ENABLE_LINE_INPUT  . . . . . . .	Number	 00000002h   
+ENABLE_MOUSE_INPUT . . . . . . .	Number	 00000010h   
+ENABLE_PROCESSED_INPUT . . . . .	Number	 00000001h   
+ENABLE_PROCESSED_OUTPUT  . . . .	Number	 00000001h   
+ENABLE_WINDOW_INPUT  . . . . . .	Number	 00000008h   
+ENABLE_WRAP_AT_EOL_OUTPUT  . . .	Number	 00000002h   
+ENHANCED_KEY . . . . . . . . . .	Number	 00000100h   
+FALSE  . . . . . . . . . . . . .	Number	 00000000h   
+FILE_APPEND_DATA . . . . . . . .	Number	 00000004h   
+FILE_ATTRIBUTE_ARCHIVE . . . . .	Number	 00000020h   
+FILE_ATTRIBUTE_COMPRESSED  . . .	Number	 00000800h   
+FILE_ATTRIBUTE_DEVICE  . . . . .	Number	 00000040h   
+FILE_ATTRIBUTE_DIRECTORY . . . .	Number	 00000010h   
+FILE_ATTRIBUTE_ENCRYPTED . . . .	Number	 00004000h   
+FILE_ATTRIBUTE_HIDDEN  . . . . .	Number	 00000002h   
+FILE_ATTRIBUTE_NORMAL  . . . . .	Number	 00000080h   
+FILE_ATTRIBUTE_NOT_CONTENT_INDEXED .	Number	 00002000h   
+FILE_ATTRIBUTE_OFFLINE . . . . .	Number	 00001000h   
+FILE_ATTRIBUTE_READONLY  . . . .	Number	 00000001h   
+FILE_ATTRIBUTE_REPARSE_POINT . .	Number	 00000400h   
+FILE_ATTRIBUTE_SPARSE_FILE . . .	Number	 00000200h   
+FILE_ATTRIBUTE_SYSTEM  . . . . .	Number	 00000004h   
+FILE_ATTRIBUTE_TEMPORARY . . . .	Number	 00000100h   
+FILE_BEGIN . . . . . . . . . . .	Number	 00000000h   
+FILE_CURRENT . . . . . . . . . .	Number	 00000001h   
+FILE_DELETE_CHILD  . . . . . . .	Number	 00000040h   
+FILE_END . . . . . . . . . . . .	Number	 00000002h   
+FILE_READ_DATA . . . . . . . . .	Number	 00000001h   
+FILE_SHARE_DELETE  . . . . . . .	Number	 00000004h   
+FILE_SHARE_READ  . . . . . . . .	Number	 00000001h   
+FILE_SHARE_WRITE . . . . . . . .	Number	 00000002h   
+FILE_WRITE_DATA  . . . . . . . .	Number	 00000002h   
+FOCUS_EVENT  . . . . . . . . . .	Number	 00000010h   
+FORMAT_MESSAGE_ALLOCATE_BUFFER .	Number	 00000100h   
+FORMAT_MESSAGE_FROM_SYSTEM . . .	Number	 00001000h   
+FormatMessage  . . . . . . . . .	Text   	 FormatMessageA
+GENERIC_ALL  . . . . . . . . . .	Number	 10000000h   
+GENERIC_EXECUTE  . . . . . . . .	Number	 20000000h   
+GENERIC_READ . . . . . . . . . .	Number	 -80000000h   
+GENERIC_WRITE  . . . . . . . . .	Number	 40000000h   
+GetCommandLine . . . . . . . . .	Text   	 GetCommandLineA
+HANDLE . . . . . . . . . . . . .	Text   	 DWORD
+HANGMAN_GAMEOVER_00  . . . . . .	Byte	 00000650 _DATA	
+HANGMAN_GAMEOVER_01  . . . . . .	Byte	 000006E9 _DATA	
+HANGMAN_GAMEOVER_02  . . . . . .	Byte	 00000782 _DATA	
+HANGMAN_GAMEOVER_03  . . . . . .	Byte	 0000081B _DATA	
+HANGMAN_GOODGAME_00  . . . . . .	Byte	 000003E8 _DATA	
+HANGMAN_GOODGAME_01  . . . . . .	Byte	 00000485 _DATA	
+HANGMAN_GOODGAME_02  . . . . . .	Byte	 0000051E _DATA	
+HANGMAN_GOODGAME_03  . . . . . .	Byte	 000005B7 _DATA	
+HANGMAN_LIVES_00 . . . . . . . .	Byte	 00000C4A _DATA	
+HANGMAN_LIVES_01 . . . . . . . .	Byte	 00000BB1 _DATA	
+HANGMAN_LIVES_02 . . . . . . . .	Byte	 00000B18 _DATA	
+HANGMAN_LIVES_03 . . . . . . . .	Byte	 00000A7F _DATA	
+HANGMAN_LIVES_04 . . . . . . . .	Byte	 000009E6 _DATA	
+HANGMAN_LIVES_05 . . . . . . . .	Byte	 0000094D _DATA	
+HANGMAN_LIVES_06 . . . . . . . .	Byte	 000008B4 _DATA	
+HEAP_GENERATE_EXCEPTIONS . . . .	Number	 00000004h   
+HEAP_GROWABLE  . . . . . . . . .	Number	 00000002h   
+HEAP_NO_SERIALIZE  . . . . . . .	Number	 00000001h   
+HEAP_REALLOC_IN_PLACE_ONLY . . .	Number	 00000010h   
+HEAP_ZERO_MEMORY . . . . . . . .	Number	 00000008h   
+IDABORT  . . . . . . . . . . . .	Number	 00000003h   
+IDCANCEL . . . . . . . . . . . .	Number	 00000002h   
+IDCLOSE  . . . . . . . . . . . .	Number	 00000008h   
+IDCONTINUE . . . . . . . . . . .	Number	 0000000Bh   
+IDHELP . . . . . . . . . . . . .	Number	 00000009h   
+IDIGNORE . . . . . . . . . . . .	Number	 00000005h   
+IDNO . . . . . . . . . . . . . .	Number	 00000007h   
+IDOK . . . . . . . . . . . . . .	Number	 00000001h   
+IDRETRY  . . . . . . . . . . . .	Number	 00000004h   
+IDTIMEOUT  . . . . . . . . . . .	Number	 00007D00h   
+IDTRYAGAIN . . . . . . . . . . .	Number	 0000000Ah   
+IDYES  . . . . . . . . . . . . .	Number	 00000006h   
+INVALID_HANDLE_VALUE . . . . . .	Number	 -00000001h   
+KBDOWN_FLAG  . . . . . . . . . .	Number	 00000001h   
+KEY_EVENT  . . . . . . . . . . .	Number	 00000001h   
+KEY_MASKS  . . . . . . . . . . .	Number	 0000001Fh   
+LEFT_ALT_PRESSED . . . . . . . .	Number	 00000002h   
+LEFT_CTRL_PRESSED  . . . . . . .	Number	 00000008h   
+MB_ABORTRETRYIGNORE  . . . . . .	Number	 00000002h   
+MB_APPLMODAL . . . . . . . . . .	Number	 00000000h   
+MB_CANCELTRYCONTINUE . . . . . .	Number	 00000006h   
+MB_DEFBUTTON1  . . . . . . . . .	Number	 00000000h   
+MB_DEFBUTTON2  . . . . . . . . .	Number	 00000100h   
+MB_DEFBUTTON3  . . . . . . . . .	Number	 00000200h   
+MB_DEFBUTTON4  . . . . . . . . .	Number	 00000300h   
+MB_HELP  . . . . . . . . . . . .	Number	 00004000h   
+MB_ICONASTERISK  . . . . . . . .	Number	 00000040h   
+MB_ICONERROR . . . . . . . . . .	Number	 00000010h   
+MB_ICONEXCLAMATION . . . . . . .	Number	 00000030h   
+MB_ICONHAND  . . . . . . . . . .	Number	 00000010h   
+MB_ICONINFORMATION . . . . . . .	Number	 00000040h   
+MB_ICONQUESTION  . . . . . . . .	Number	 00000020h   
+MB_ICONSTOP  . . . . . . . . . .	Number	 00000010h   
+MB_ICONWARNING . . . . . . . . .	Number	 00000030h   
+MB_OKCANCEL  . . . . . . . . . .	Number	 00000001h   
+MB_OK  . . . . . . . . . . . . .	Number	 00000000h   
+MB_RETRYCANCEL . . . . . . . . .	Number	 00000005h   
+MB_SYSTEMMODAL . . . . . . . . .	Number	 00001000h   
+MB_TASKMODAL . . . . . . . . . .	Number	 00002000h   
+MB_USERICON  . . . . . . . . . .	Number	 00000080h   
+MB_YESNOCANCEL . . . . . . . . .	Number	 00000003h   
+MB_YESNO . . . . . . . . . . . .	Number	 00000004h   
+MENU_EVENT . . . . . . . . . . .	Number	 00000008h   
+MOUSE_EVENT  . . . . . . . . . .	Number	 00000002h   
+MessageBox . . . . . . . . . . .	Text   	 MessageBoxA
+NULL . . . . . . . . . . . . . .	Number	 00000000h   
+NUMLOCK_ON . . . . . . . . . . .	Number	 00000020h   
+OPEN_ALWAYS  . . . . . . . . . .	Number	 00000004h   
+OPEN_EXISTING  . . . . . . . . .	Number	 00000003h   
+PeekConsoleInput . . . . . . . .	Text   	 PeekConsoleInputA
+RIGHT_ALT_PRESSED  . . . . . . .	Number	 00000001h   
+RIGHT_CTRL_PRESSED . . . . . . .	Number	 00000004h   
+ReadConsoleInput . . . . . . . .	Text   	 ReadConsoleInputA
+ReadConsole  . . . . . . . . . .	Text   	 ReadConsoleA
+SCROLLLOCK_ON  . . . . . . . . .	Number	 00000040h   
+SHIFT_MASK . . . . . . . . . . .	Number	 00000010h   
+SHIFT_PRESSED  . . . . . . . . .	Number	 00000010h   
+STD_ERROR_HANDLE . . . . . . . .	Number	 -0000000Ch   
+STD_INPUT_HANDLE . . . . . . . .	Number	 -0000000Ah   
+STD_OUTPUT_HANDLE  . . . . . . .	Number	 -0000000Bh   
+SetConsoleTitle  . . . . . . . .	Text   	 SetConsoleTitleA
+TAB  . . . . . . . . . . . . . .	Number	 00000009h   
+TRUE . . . . . . . . . . . . . .	Number	 00000001h   
+TRUNCATE_EXISTING  . . . . . . .	Number	 00000005h   
+VK_11  . . . . . . . . . . . . .	Number	 000000BDh   
+VK_12  . . . . . . . . . . . . .	Number	 000000BBh   
+VK_ADD . . . . . . . . . . . . .	Number	 0000006Bh   
+VK_BACK  . . . . . . . . . . . .	Number	 00000008h   
+VK_CANCEL  . . . . . . . . . . .	Number	 00000003h   
+VK_CAPITAL . . . . . . . . . . .	Number	 00000014h   
+VK_CLEAR . . . . . . . . . . . .	Number	 0000000Ch   
+VK_CONTROL . . . . . . . . . . .	Number	 00000011h   
+VK_DECIMAL . . . . . . . . . . .	Number	 0000006Eh   
+VK_DELETE  . . . . . . . . . . .	Number	 0000002Eh   
+VK_DIVIDE  . . . . . . . . . . .	Number	 0000006Fh   
+VK_DOWN  . . . . . . . . . . . .	Number	 00000028h   
+VK_END . . . . . . . . . . . . .	Number	 00000023h   
+VK_ESCAPE  . . . . . . . . . . .	Number	 0000001Bh   
+VK_EXECUTE . . . . . . . . . . .	Number	 0000002Bh   
+VK_F10 . . . . . . . . . . . . .	Number	 00000079h   
+VK_F11 . . . . . . . . . . . . .	Number	 0000007Ah   
+VK_F12 . . . . . . . . . . . . .	Number	 0000007Bh   
+VK_F13 . . . . . . . . . . . . .	Number	 0000007Ch   
+VK_F14 . . . . . . . . . . . . .	Number	 0000007Dh   
+VK_F15 . . . . . . . . . . . . .	Number	 0000007Eh   
+VK_F16 . . . . . . . . . . . . .	Number	 0000007Fh   
+VK_F17 . . . . . . . . . . . . .	Number	 00000080h   
+VK_F18 . . . . . . . . . . . . .	Number	 00000081h   
+VK_F19 . . . . . . . . . . . . .	Number	 00000082h   
+VK_F1  . . . . . . . . . . . . .	Number	 00000070h   
+VK_F20 . . . . . . . . . . . . .	Number	 00000083h   
+VK_F21 . . . . . . . . . . . . .	Number	 00000084h   
+VK_F22 . . . . . . . . . . . . .	Number	 00000085h   
+VK_F23 . . . . . . . . . . . . .	Number	 00000086h   
+VK_F24 . . . . . . . . . . . . .	Number	 00000087h   
+VK_F2  . . . . . . . . . . . . .	Number	 00000071h   
+VK_F3  . . . . . . . . . . . . .	Number	 00000072h   
+VK_F4  . . . . . . . . . . . . .	Number	 00000073h   
+VK_F5  . . . . . . . . . . . . .	Number	 00000074h   
+VK_F6  . . . . . . . . . . . . .	Number	 00000075h   
+VK_F7  . . . . . . . . . . . . .	Number	 00000076h   
+VK_F8  . . . . . . . . . . . . .	Number	 00000077h   
+VK_F9  . . . . . . . . . . . . .	Number	 00000078h   
+VK_HELP  . . . . . . . . . . . .	Number	 0000002Fh   
+VK_HOME  . . . . . . . . . . . .	Number	 00000024h   
+VK_INSERT  . . . . . . . . . . .	Number	 0000002Dh   
+VK_LBUTTON . . . . . . . . . . .	Number	 00000001h   
+VK_LCONTROL  . . . . . . . . . .	Number	 000000A2h   
+VK_LEFT  . . . . . . . . . . . .	Number	 00000025h   
+VK_LMENU . . . . . . . . . . . .	Number	 000000A4h   
+VK_LSHIFT  . . . . . . . . . . .	Number	 000000A0h   
+VK_MENU  . . . . . . . . . . . .	Number	 00000012h   
+VK_MULTIPLY  . . . . . . . . . .	Number	 0000006Ah   
+VK_NEXT  . . . . . . . . . . . .	Number	 00000022h   
+VK_NUMLOCK . . . . . . . . . . .	Number	 00000090h   
+VK_NUMPAD0 . . . . . . . . . . .	Number	 00000060h   
+VK_NUMPAD1 . . . . . . . . . . .	Number	 00000061h   
+VK_NUMPAD2 . . . . . . . . . . .	Number	 00000062h   
+VK_NUMPAD3 . . . . . . . . . . .	Number	 00000063h   
+VK_NUMPAD4 . . . . . . . . . . .	Number	 00000064h   
+VK_NUMPAD5 . . . . . . . . . . .	Number	 00000065h   
+VK_NUMPAD6 . . . . . . . . . . .	Number	 00000066h   
+VK_NUMPAD7 . . . . . . . . . . .	Number	 00000067h   
+VK_NUMPAD8 . . . . . . . . . . .	Number	 00000068h   
+VK_NUMPAD9 . . . . . . . . . . .	Number	 00000069h   
+VK_PAUSE . . . . . . . . . . . .	Number	 00000013h   
+VK_PRINT . . . . . . . . . . . .	Number	 0000002Ah   
+VK_PRIOR . . . . . . . . . . . .	Number	 00000021h   
+VK_RBUTTON . . . . . . . . . . .	Number	 00000002h   
+VK_RCONTROL  . . . . . . . . . .	Number	 000000A3h   
+VK_RETURN  . . . . . . . . . . .	Number	 0000000Dh   
+VK_RIGHT . . . . . . . . . . . .	Number	 00000027h   
+VK_RMENU . . . . . . . . . . . .	Number	 000000A5h   
+VK_RSHIFT  . . . . . . . . . . .	Number	 000000A1h   
+VK_SCROLL  . . . . . . . . . . .	Number	 00000091h   
+VK_SEPARATER . . . . . . . . . .	Number	 0000006Ch   
+VK_SHIFT . . . . . . . . . . . .	Number	 00000010h   
+VK_SNAPSHOT  . . . . . . . . . .	Number	 0000002Ch   
+VK_SPACE . . . . . . . . . . . .	Number	 00000020h   
+VK_SUBTRACT  . . . . . . . . . .	Number	 0000006Dh   
+VK_TAB . . . . . . . . . . . . .	Number	 00000009h   
+VK_UP  . . . . . . . . . . . . .	Number	 00000026h   
+WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
+WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
+WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
+black  . . . . . . . . . . . . .	Number	 00000000h   
+blue . . . . . . . . . . . . . .	Number	 00000001h   
+brown  . . . . . . . . . . . . .	Number	 00000006h   
+bytesWritten . . . . . . . . . .	DWord	 000003E4 _DATA	
+chardelete . . . . . . . . . . .	Byte	 00000DBE _DATA	
+consoleHandle  . . . . . . . . .	DWord	 000003E0 _DATA	
+cyan . . . . . . . . . . . . . .	Number	 00000003h   
+drowDelay  . . . . . . . . . . .	Number	 000003E8h   
+endl . . . . . . . . . . . . . .	Text   	 0dh,0ah
+exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
+gray . . . . . . . . . . . . . .	Number	 00000008h   
+green  . . . . . . . . . . . . .	Number	 00000002h   
+guessLetterArray . . . . . . . .	Byte	 00000D8C _DATA	
+guessLetter  . . . . . . . . . .	Byte	 00000D59 _DATA	
+guessWords . . . . . . . . . . .	Byte	 00000D5A _DATA	
+lengthArray  . . . . . . . . . .	DWord	 00000D55 _DATA	
+len  . . . . . . . . . . . . . .	Number	 00000055h   
+letterDash . . . . . . . . . . .	Byte	 00000DBF _DATA	
+lightBlue  . . . . . . . . . . .	Number	 00000009h   
+lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
+lightGray  . . . . . . . . . . .	Number	 00000007h   
+lightGreen . . . . . . . . . . .	Number	 0000000Ah   
+lightMagenta . . . . . . . . . .	Number	 0000000Dh   
+lightRed . . . . . . . . . . . .	Number	 0000000Ch   
+magenta  . . . . . . . . . . . .	Number	 00000005h   
+manyWords  . . . . . . . . . . .	Byte	 00000CE7 _DATA	
+messageSizeGoodGame  . . . . . .	DWord	 00000481 _DATA	
+messageSize  . . . . . . . . . .	DWord	 000003DC _DATA	
+message  . . . . . . . . . . . .	Byte	 00000000 _DATA	
+ranNum . . . . . . . . . . . . .	DWord	 00000CE3 _DATA	
+red  . . . . . . . . . . . . . .	Number	 00000004h   
+selectedWords  . . . . . . . . .	Byte	 00000D40 _DATA	
+statusGameLive . . . . . . . . .	DWord	 00000D3C _DATA	
+var_loop . . . . . . . . . . . .	Byte	 00000DC0 _DATA	
+white  . . . . . . . . . . . . .	Number	 0000000Fh   
+wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
+yellow . . . . . . . . . . . . .	Number	 0000000Eh   
+
+	   0 Warnings
+	   0 Errors

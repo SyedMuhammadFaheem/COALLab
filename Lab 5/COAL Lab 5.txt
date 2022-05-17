@@ -1,0 +1,215 @@
+							Task 1
+
+include irvine32.inc
+.model small
+.stack 100h
+.data
+string BYTE "The Source Array is: ",0
+string1 BYTE "The Target Array is: ",0
+Source BYTE "Faheem",0
+Target BYTE 6 dup(?)
+.code
+main proc
+mov esi,0
+mov edx,offset string
+call WriteString
+mov edx,offset Source
+call WriteString
+call Crlf
+mov ecx,6
+L1:
+mov eax,0
+mov al,Source[esi]
+mov Target[esi],al
+inc esi
+loop L1
+mov edx,offset string1
+call WriteString
+mov esi,offset Target
+mov ecx,6
+L2:
+mov eax,[esi]
+call WriteChar
+inc esi
+loop L2
+invoke exitprocess,0
+main endp
+end main
+
+							Task 2
+
+
+include Irvine32.inc
+.data
+arr byte 1h,2h,3h,4h,5h
+.code
+main proc
+mov esi, OFFSET arr 
+mov ebx, TYPE arr 
+mov ecx, LENGTHOF arr 
+call DumpMem
+call crlf
+
+mov esi,0
+mov edi,(LENGTHOF arr)-1
+mov ecx,(LENGTHOF arr)/2
+L1:
+	mov al,arr[esi]
+	xchg al,arr[edi]
+	mov arr[esi],al
+
+	inc esi
+	dec edi
+loop L1
+
+mov esi, OFFSET arr 
+mov ebx, TYPE arr 
+mov ecx, LENGTHOF arr 
+call DumpMem
+exit
+main endp
+end main
+
+
+							Task 3
+
+include irvine32.inc
+.model small
+.stack 100h
+.data
+.code
+main proc
+mov ecx,8
+mov ebx,0
+mov edx,1
+mov eax,ebx
+call WriteInt
+call Crlf
+mov eax,edx
+call WriteInt
+call Crlf
+L1:
+mov eax,0
+add eax,ebx
+add eax,edx
+call WriteInt
+mov ebx,edx
+mov edx,eax
+call Crlf
+loop L1
+main endp
+end main
+
+
+							Task 4
+
+include irvine32.inc
+.model small
+.stack 100h
+.data
+j DWORD 1
+k DWORD 5
+Star DWORD "*",0
+Space DWORD " ",0
+.code
+main proc
+mov ecx,5
+L1:
+mov ebx,ecx
+mov ecx,k
+mov eax,k
+L2:
+mov edx,offset Space
+call WriteString
+dec eax
+loop L2
+dec k
+mov ecx,j
+L3:
+mov edx,offset Star
+call WriteString
+dec eax
+loop L3
+inc j
+call Crlf
+mov ecx,ebx
+loop L1
+main endp
+end main
+
+
+							Task 5
+
+
+
+include irvine32.inc
+.model small
+.stack 100h
+.data
+.code
+main proc
+call ReadInt
+sub eax,2
+mov ecx,eax
+mov ebx,0
+mov edx,1
+mov eax,ebx
+call WriteInt
+call Crlf
+mov eax,edx
+call WriteInt
+call Crlf
+L1:
+mov eax,0
+add eax,ebx
+add eax,edx
+call WriteInt
+mov ebx,edx
+mov edx,eax
+call Crlf
+loop L1
+main endp
+end main
+
+
+
+
+
+
+							Task 6
+
+include irvine32.inc
+.model small
+.stack 100h
+.data
+j DWORD 1
+k DWORD ?
+Star DWORD "*",0
+Space DWORD " ",0
+.code
+main proc
+call ReadInt
+mov ecx,eax
+mov k,eax
+L1:
+mov ebx,ecx
+mov ecx,k
+mov eax,k
+L2:
+mov edx,offset Space
+call WriteString
+dec eax
+loop L2
+dec k
+mov ecx,j
+L3:
+mov edx,offset Star
+call WriteString
+dec eax
+loop L3
+inc j
+call Crlf
+mov ecx,ebx
+loop L1
+main endp
+end main

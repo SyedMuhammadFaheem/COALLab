@@ -1,0 +1,360 @@
+----------------------------------------------Task 1------------------------------------------------------
+
+include irvine32.inc
+include macros.inc
+.stack 100h
+.model small
+.data
+arr1 dword 5,4,3,2,1
+.code
+main proc
+mov ecx, lengthof arr1
+push ecx
+mov esi,offset arr1
+push esi
+call BubbleSort
+exit
+main endp
+BubbleSort proc
+push ebp
+mov ebp,esp
+mov ecx,[ebp+12]
+L1:
+mov esi,[ebp+8]
+mov edi,[ebp+8]
+add edi,4
+mov ebx,ecx
+dec ebx
+mov ecx,ebx
+inc ebx
+L2:
+cmp ecx,0
+JZ L4
+mov eax,[esi]
+cmp eax,[edi]
+JNS L3
+add edi,4
+add esi,4
+loop L2
+L3:
+mov edx,[edi]
+mov [esi],edx
+mov [edi],eax
+dec ecx
+JECXZ L4
+add edi,4
+add esi,4
+jmp L2
+L4:
+mov ecx,ebx
+loop L1
+mov ecx,[ebp+12]
+mov esi,[ebp+8]
+mWrite "The sorted array is: "
+L5:
+mov eax,[esi]
+call WriteDec
+mWrite " "
+add esi,4
+loop L5
+pop ebp
+ret
+BubbleSort endp
+end main
+
+
+
+----------------------------------------------Task 2------------------------------------------------------
+
+include irvine32.inc
+include macros.inc
+.stack 100h
+.model small
+.data
+var dword ?
+divisor dword 10
+sum dword ?
+.code
+main proc
+call TakeInput
+exit
+main endp
+
+Display Proc
+push ebp
+mov ebp,esp
+mov eax,[ebp+8]
+call WriteDec
+mWrite " is an Armstrong Number!"
+pop ebp
+ret 4
+Display endp
+
+TakeInput proc
+mWrite "Enter the number to check: "
+call ReadInt
+push divisor
+push eax
+call CheckArmstrong
+ret 
+TakeInput endp
+
+CheckArmstrong proc
+push ebp
+mov ebp,esp
+sub esp,4
+mov eax,[ebp+8]
+mov dword ptr[ebp-4],0
+L1:
+mov ecx,[ebp+12]
+mov edx,0
+div ecx 
+mov ebx,eax
+mov eax,edx
+mov ecx,edx
+mul ecx
+mul ecx
+add [ebp-4],eax
+mov eax,ebx
+cmp eax,0
+JNZ L1
+mov eax,[ebp-4]
+mov ebx,[ebp+8]
+cmp eax,ebx
+JZ L3
+mWrite "The Number entered is not an Armstrong Number!"
+pop ebp
+add esp,4
+ret 8
+L3:
+push eax
+call Display
+add esp,4
+pop ebp
+ret 8
+CheckArmstrong endp
+end main
+
+
+----------------------------------------------Task 3------------------------------------------------------
+
+
+
+include irvine32.inc
+include macros.inc
+.model small
+.stack 100h
+.data
+Str1 byte 25 dup(?)
+.code
+main proc
+mov ecx,lengthof Str1
+mWrite "Enter the string to reverse: "
+mov edx,offset Str1
+call ReadString
+mov [Str1+eax],0
+mov ebx,eax
+dec ebx
+shr eax,1
+mov ecx,eax
+mov eax,ebx
+mov ebx,0
+call Reverse
+exit
+main endp
+
+Reverse proc
+cmp ecx,0
+JNE L1
+mWrite "The Reversed String is: "
+mov edx,offset Str1
+call WriteString
+ret 
+L1:
+mov esi,offset Str1
+add esi,eax
+mov edi,offset Str1
+add edi,ebx
+mov edx,0
+mov dl,[esi]
+xchg dl,[edi]
+mov [esi],dl
+inc ebx
+dec eax
+dec ecx
+call Reverse
+ret
+Reverse endp
+end main
+
+
+
+
+----------------------------------------------Task 4------------------------------------------------------
+
+
+
+include irvine32.inc
+include macros.inc
+.model small
+.stack 100h
+.data
+.code
+main proc
+call LocalSquare
+exit
+main endp
+LocalSquare proc
+enter 1,0
+mWrite "Enter the number to get the square of: "
+call ReadInt
+mul eax
+mov [ebp-4],eax
+mWrite "The Square of the entered number is: "
+call WriteDec
+leave
+ret 
+LocalSquare endp
+end main
+
+
+
+
+----------------------------------------------Task 5------------------------------------------------------
+
+
+
+
+include irvine32.inc
+include macros.inc
+.stack 100h
+.model small
+.data
+num dword ?
+.code
+main proc
+mWrite "Enter the number you want to take the factorial of: "
+call ReadInt
+mov ecx,eax
+
+mov eax,1
+
+call Factorial
+exit
+main endp
+
+Factorial proc
+cmp ecx,0
+JNE L1
+mWrite "The factorial of the given number is: "
+call WriteDec
+ret
+L1:
+mul ecx
+dec ecx
+call Factorial
+ret 
+Factorial endp
+end main
+
+
+
+
+----------------------------------------------Task 6------------------------------------------------------
+
+
+
+include irvine32.inc
+include macros.inc
+.stack 100h
+.model small
+.data
+arr dword 4 dup(?)
+check dword 1
+indexes dword 4 dup(?)
+.code
+main proc
+mWrite "Enter the 4 values to check the prime number status: "
+mov esi, offset arr
+mov ecx,4
+L1:
+call ReadInt 
+mov [esi],eax
+add esi,4
+loop L1
+call CheckPrime
+exit
+main endp
+
+LargestPrime proc
+cmp check,0
+JNZ L7
+call Crlf
+mWrite "All the values of the array were not prime!"
+L7:
+call Crlf
+mWrite "The Prime Values are: "
+mov ecx,Lengthof indexes
+mov esi,offset indexes
+mov ebx,0
+L6:
+cmp ebx,[esi]
+JB L10
+L11:
+mov eax,[esi]
+cmp eax,0
+JZ L9
+call WriteDec
+mWrite " "
+L9:
+add esi,4
+loop L6
+call Crlf
+mWrite "The Largest Prime Value is: "
+mov eax,ebx
+call WriteDec
+ret
+L10:
+mov ebx,[esi]
+jmp L11
+ret
+LargestPrime endp
+
+CheckPrime proc
+mov ecx,4
+mov edi,offset indexes
+mov esi,offset arr
+L2:
+mov ebx,ecx
+mov ecx,0
+mov ecx,[esi]
+cmp ecx,2
+JBE L4
+dec ecx
+L3:
+mov edx,0
+mov eax,0
+mov eax,[esi]
+div ecx
+dec ecx
+cmp edx,0
+JZ L5
+cmp ecx,1
+JA L3
+L4:
+mov edx,0
+mov edx,[esi]
+mov [edi],edx
+L8:
+add edi,4
+add esi,4
+mov ecx,ebx
+loop L2
+call LargestPrime
+ret
+L5:
+mov check,0
+jmp L8
+ret 
+CheckPrime endp
+end main

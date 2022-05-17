@@ -1,0 +1,130 @@
+							Question 1 Part (a)
+
+include irvine32.inc
+include macros.inc
+.model small
+.stack 100h
+.data
+.code
+main proc
+mov ecx,25
+mov eax,2
+L1:
+call WriteInt
+call Crlf
+add eax,5
+loop L1
+exit
+main endp
+end main
+
+
+							Question 1 Part (b)
+
+
+
+include irvine32.inc
+include macros.inc
+.model small
+.stack 100h
+.data
+intArr word 20 dup(2)
+.code
+main proc
+mov ecx,20
+mov esi,0
+mov eax,0
+L1:
+mov ebx,0
+movzx ebx,intArr[esi]
+add ebx,ebx
+add eax,ebx
+add esi,2
+loop L1
+call WriteInt
+exit
+main endp
+end main
+
+
+
+Question 2 
+
+
+include irvine32.inc
+include macros.inc
+.model small
+.stack 100h
+.data
+arrayW word 50,20,90,101,450
+arrayB byte 10,24,67,90,100
+arrayDW dword 3 dup(?)
+.code
+main proc
+mov ecx,3
+mov esi,0
+mov edi,1
+mov edx,0
+L1:
+movzx ebx,arrayW[esi*Type arrayW]
+movzx eax,arrayB[edi*Type arrayB]
+add ebx,eax
+mov arrayDW[edx],ebx
+add edx,4
+add esi,2
+add edi,2
+loop L1
+mov ecx,3
+mov esi,offset arrayDW
+L2:
+mov eax,[esi]
+call WriteInt
+call Crlf
+add esi,4
+loop L2
+exit
+main endp
+end main
+
+
+Question 3 (a)
+
+
+Question 3 (b)
+Question 4 (a)
+Question 4 (b)
+Question 5
+
+include irvine32.inc
+include macros.inc
+.model small
+.stack 100h
+.data
+msg1 byte "Enter the number of lines you want: ",0
+space byte " ",0
+lines dword ?
+.code
+main proc
+mov edx,offset msg1
+call WriteString
+call ReadInt
+mov ecx,eax
+mov eax,1
+L1:
+mov ebx,ecx
+mov ecx,4
+L2:
+call WriteDec
+mov edx,offset space
+call WriteString
+inc eax
+loop L2
+call Crlf
+mov ecx,ebx
+loop L1
+exit
+main endp
+end main
+
+
+Question 6

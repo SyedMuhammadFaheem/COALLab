@@ -1,0 +1,12 @@
+1) Activate the standard console first
+2) Then using WriteConsole command print the message variable which consists of the Hangman Trademark Sentence.
+3) Then randomize function is called to pick any number from 1 to 10. This would be the length of the (to be guessed word) from the hardcoded words.
+4) Then the findstr function is called where the length evaluated before will be compared and the word of that length will 
+be extracted and will then get saved into the selectedword variable. In this we won't have to call this function again and again.
+5) Then arraydash function is called which will display the dashes on the console screen according to the length of the word.
+6) So, now the real game starts. You will be given 6 lives to play this game. Every one wrong letter guessed inaacurately will 
+lead to deduction of one life. Initializing the status game variable with 6.
+7) Then we are into this label named, again input word which will run again and again until all the lives are finished.
+8) The first line consists of the calling of the function print hangman live in which the hangman figure will be printed according the lives left.
+9) Then the programme checks if the lives are left and if the lives become equal to 0 then the label loop game over will be called.
+10)

@@ -1,0 +1,164 @@
+							*********** Task 1 ***********
+INCLUDE Irvine32.inc
+.model small
+.stack 100h
+.data
+.code
+main proc
+mov ebx,47 
+add ebx,39
+add ebx,60
+add ebx,85
+add ebx,64
+add ebx,54o
+sub ebx,0Ah
+call Dumpregs
+invoke exitprocess,0
+main endp
+end  main
+
+
+							*********** Task 2 ***********
+INCLUDE Irvine32.inc
+.model small
+.stack 100h
+.data
+.code  30- 9 + 186 – 150
+main proc
+mov ebx,0h
+mov ebx,30
+sub ebx,9
+add ebx,186
+sub ebx,150
+call Dumpregs
+invoke exitprocess,0
+main endp
+end  main
+
+							*********** Task 3 ***********
+
+INCLUDE Irvine32.inc
+.model small
+.stack 100h
+.data
+.code 
+main proc
+mov ebx,0h
+mov ebx, 101110b
+add ebx,50Ah
+add ebx,6710d
+add ebx,1010001b
+add ebx, 0Fh
+call Dumpregs
+invoke exitprocess,0
+main endp
+end  main
+
+
+							*********** Task 4 ***********
+
+INCLUDE Irvine32.inc
+.model small
+.stack 100h
+.data
+.code 
+main proc
+mov ebx,0h
+mov ebx, 10001101b
+sub ebx,0D83h
+add ebx,385
+add ebx,10 
+add ebx, 1111101b
+sub ebx,0Eh
+add ebx, 0Fh
+call Dumpregs
+invoke exitprocess,0
+main endp
+end  main
+
+							*********** Part 2 Task 1 (without values) ***********
+
+INCLUDE Irvine32.inc
+.model small
+.data
+.code
+main PROC
+mov edx, eax 
+add edx, 1 
+add edx, ebx 
+add edx,edx 
+sub edx, ecx 
+add edx,0Ah
+sub edx,65o
+add edx,73d
+call DumpRegs
+invoke exitprocess,0
+main ENDP
+END main
+
+
+							*********** Part 2 Task 1 (with values) ***********
+
+INCLUDE Irvine32.inc
+.model small
+.data
+.code
+main PROC
+mov eax,7d
+mov ebx,83h
+mov ecx,247o
+mov edx,0FFh
+mov edx, eax 
+add edx, 1 
+add edx, ebx 
+add edx,edx 
+sub edx, ecx 
+add edx,0Ah
+sub edx,65o
+add edx,73d
+call DumpRegs
+invoke exitprocess,0
+main ENDP
+END main
+
+
+							*********** Part 2 Task 2 (without values) ***********
+
+INCLUDE Irvine32.inc
+.model small
+.data
+.code
+main PROC
+mov ebx,5ADh 
+sub ebx,eax 
+add ebx, 65o 
+add ebx,65d 
+sub ebx,11110111b 
+add ebx,150
+call DumpRegs
+invoke exitprocess,0
+main ENDP
+END main
+
+
+							*********** Part 2 Task 2 (with values) ***********
+
+INCLUDE Irvine32.inc
+.model small
+.data
+.code
+main PROC
+mov eax,7d
+mov ebx,83h
+mov ecx,247o
+mov edx,0FFh
+mov ebx,5ADh 
+sub ebx,eax 
+add ebx, 65o 
+add ebx,65d 
+sub ebx,11110111b 
+add ebx,150
+call DumpRegs
+invoke exitprocess,0
+main ENDP
+END main

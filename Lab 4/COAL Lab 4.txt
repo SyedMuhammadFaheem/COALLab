@@ -1,0 +1,258 @@
+							Task 1
+
+include Irvine32.inc
+.model small
+.stack 100h
+.data
+val1 DWORD 8000h
+.code
+main proc
+mov eax,val1
+add eax,1
+call Dumpregs
+invoke exitprocess,0
+main endp
+end main
+
+							Task 2
+
+
+include Irvine32.inc
+.model small
+.stack 100h
+.data
+.code
+main proc
+mov ax,7FF0h
+mov al,10h
+mov ah,1
+mov ax,2
+invoke exitprocess,0
+main endp
+end main
+
+
+							Task 3
+
+
+include Irvine32.inc
+.model small
+.stack 100h
+.data
+array DWORD 8,5,1,2,6
+.code
+main proc
+mov eax,array
+call WriteInt
+call Crlf
+mov eax,array+4
+call WriteInt
+call Crlf
+mov eax,array+8
+call WriteInt
+call Crlf
+mov eax,array+12
+call WriteInt
+call Crlf
+mov eax,array+16
+call WriteInt
+call Crlf
+call Crlf
+mov eax,[array+8]
+mov ebx,[array]
+mov array,eax
+mov [array+8],ebx
+mov eax,[array+8]
+mov ebx,[array+16]
+mov [array+16],eax
+mov [array+8],ebx
+mov eax,[array+4]
+mov ebx,[array+8]
+mov [array+8],eax
+mov [array+4],ebx
+mov eax,[array+4]
+mov ebx,[array+12]
+mov [array+12],eax
+mov [array+4],ebx
+mov eax,array
+call WriteDec
+call Crlf
+mov eax,[array+4]
+call WriteDec
+call Crlf
+mov eax,[array+8]
+call WriteDec
+call Crlf
+mov eax,[array+12]
+call WriteDec
+call Crlf
+mov eax,[array+16]
+call WriteDec
+invoke exitprocess,0
+main endp
+end main
+
+							Task 4
+
+include Irvine32.inc
+.model small
+.stack 100h
+.data
+arrayB BYTE 10,20,30
+arrayW WORD 150,250,350
+arrayDW DWORD 600,1200,1800
+SUM1 DWORD ?
+SUM2 DWORD ?
+SUM3 DWORD ?
+.code
+main proc
+mov eax,0
+mov al,arrayB
+add ax,arrayW
+add eax,arrayDW
+mov SUM1,eax
+mov eax,0
+mov al,[arrayB+1]
+add ax,[arrayW+2]
+add eax,[arrayDW+4]
+mov SUM2,eax
+mov eax,0
+mov al,[arrayB+2]
+add ax,[arrayW+4]
+add eax,[arrayDW+8]
+mov SUM3,eax
+mov eax,SUM1
+call WriteInt
+call Crlf
+mov eax,SUM2
+call WriteInt
+call Crlf
+mov eax,SUM3
+call WriteInt
+invoke exitprocess,0
+main endp
+end main
+
+
+							Task 5
+
+include Irvine32.inc
+.model small
+.stack 100h
+.data
+array1 BYTE 10, 20, 30, 40
+array2 BYTE 4 DUP (?)
+.code
+main proc
+mov al,array1+3
+mov array2,al
+mov al,array1+2
+mov array2+1,al
+mov al,array1+1
+mov array2+2,al
+mov al,array1
+mov array2+3,al
+
+mov eax,0
+mov al,array2
+call WriteInt
+call Crlf
+mov eax,0
+mov al,array2+1
+call WriteInt
+call Crlf
+mov eax,0
+mov al,array2+2
+call WriteInt
+call Crlf
+mov eax,0
+mov al,array2+3
+call WriteInt
+main endp
+end main
+
+
+							Task 6
+
+include Irvine32.inc
+.model small
+.stack 100h
+.data
+array DWORD 8,5,1,2,6
+.code
+main proc
+mov esi,offset array
+add esi,4
+mov eax,[esi]
+sub array,eax
+mov eax,array
+call WriteInt
+call Crlf
+
+add esi,4
+mov eax,[esi]
+sub array+4,eax
+mov eax,array+4
+call WriteInt
+call Crlf
+
+mov eax,[esi]
+sub array+12,eax
+mov eax,array+12
+call WriteInt
+call Crlf
+
+add esi,4
+mov eax,[esi]
+sub array+16,eax
+mov eax,array+16
+call WriteInt
+call Crlf
+
+invoke exitprocess,0
+main endp
+end main
+
+
+							Task 7
+
+include Irvine32.inc
+.model small
+.stack 100h
+.data
+arrayB BYTE 60, 70, 80
+arrayW WORD 150, 250, 350
+arrayD DWORD 600, 1200, 1800
+.code
+main proc
+mov esi,0
+mov ebx,0
+mov bl,arrayB[esi* TYPE arrayB]
+mov esi,2
+mov eax,0
+mov al,arrayB[esi* TYPE arrayB]
+add al,bl
+call WriteInt
+call Crlf
+
+mov esi,0
+mov ebx,0
+mov bx,arrayW[esi* TYPE arrayW]
+mov esi,2
+mov eax,0
+mov ax,arrayW[esi* TYPE arrayW]
+add ax,bx
+call WriteInt
+call Crlf
+
+mov esi,0
+mov ebx,arrayD[esi* TYPE arrayD]
+mov esi,2
+mov eax,arrayD[esi* TYPE arrayD]
+add eax,ebx
+call WriteInt
+call Crlf
+
+invoke exitprocess,0
+main endp
+end main

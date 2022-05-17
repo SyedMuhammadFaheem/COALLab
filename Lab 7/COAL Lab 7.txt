@@ -1,0 +1,208 @@
+							Task 1
+
+include irvine32.inc
+.model small
+.stack 100h
+.data
+var dword 5
+x byte 5
+.code
+main proc
+;mov ecx,2
+;mov edx,3
+cmp var,ecx
+JB L1
+L1:
+cmp ecx,edx
+JAE L2
+mov x,0
+mov eax,0
+mov al,x
+call WriteDec
+invoke exitprocess,0
+L2:
+mov x,1
+mov eax,0
+mov al,x
+call WriteDec
+main endp
+end main
+
+
+							Task 2
+
+include irvine32.inc
+.model small
+.stack 100h
+.data
+intArr sword 0,0,0,0,1,20,35,-12,66,4,0
+msg1 byte "The first non-zero value is: ",0
+msg2 byte "The non-zero value is at index: ",0
+index_count byte -1
+.code
+main proc
+mov esi,0
+L1: 
+movzx eax,intArr[esi]
+add esi,2
+inc index_count
+cmp eax,0
+JE L1	
+mov edx,offset msg1
+call WriteString
+call WriteInt
+call Crlf
+mov edx,offset msg2
+call WriteString
+movzx eax,index_count
+call WriteInt
+exit
+main endp
+end main
+
+
+							Task 3
+
+include irvine32.inc
+.model small
+.stack 100h
+.data
+var1 dword ?
+var2 dword ?
+var3 dword ?
+var4 dword ?
+msg1 byte "Enter the integer: ",0
+msg2 byte "The inserted integers entered are equal! ",0
+msg3 byte "The inserted integers entered are not equal! ",0
+.code
+main proc
+mov edx,offset msg1
+call WriteString
+call ReadInt
+mov var1,eax
+
+mov edx,offset msg1
+call WriteString
+call ReadInt
+mov var2,eax
+
+mov edx,offset msg1
+call WriteString
+call ReadInt
+mov var3,eax
+
+mov edx,offset msg1
+call WriteString
+call ReadInt
+mov var4,eax
+
+mov ebx,var1
+mov ebx,var2
+mov ebx,var3
+mov ebx,var4
+mov ecx,4
+L1:
+sub ebx,var1
+L2:
+cmp ebx,0
+JE L3
+mov edx,offset msg3
+call WriteString
+exit
+L3:
+mov edx,offset msg2
+call WriteString
+exit
+
+main endp
+end main
+
+
+							Task 4
+
+include irvine32.inc
+.model small
+.stack 100h
+.data
+arr word 10,4,7,14,299,156,3,19,29,300,20
+var word ?
+msg1 byte "Enter the integer for Sequential Search: ",0
+msg2 byte "The Searched integer was found!",0
+msg3 byte "The Searched integer was not found!",0
+.code
+main proc
+mov esi,offset arr
+mov edx,offset msg1
+call WriteString
+mov eax,0
+call ReadInt
+mov var,ax
+mov ecx,lengthof arr
+L1:
+mov eax,0
+mov ax,[esi]
+add esi,2
+cmp ax,var
+JE L2
+loop L1
+mov edx,offset msg3
+call WriteString
+exit
+L2:
+mov edx,offset msg2
+call WriteString
+call WriteInt
+exit
+main endp
+end main
+
+							Task 5
+
+
+
+include irvine32.inc
+.model small
+.stack 100h
+.data
+arr dword 5,4,3,2,1
+swap_count dword 0
+msg1 byte "The Swap Count of the whole array is: ",0
+.code
+main proc
+mov esi,0
+mov edi,4
+mov ecx,(lengthof arr-1)
+L1:
+mov eax,arr[esi]
+mov ebx,arr[edi]
+cmp eax,ebx
+JA L2
+add esi,4
+add edi,4
+loop L1
+L2:
+inc swap_count
+mov arr[esi],ebx
+mov arr[edi],eax
+dec ecx
+cmp ecx,0
+JECXZ L3
+add esi,4
+add edi,4
+JMP L1
+L3:
+mov edx,offset msg1
+call WriteString
+mov eax,swap_count
+call WriteInt
+call Crlf
+mov ecx,lengthof arr
+mov esi,0
+L4:
+mov eax,arr[esi]
+call WriteInt
+add esi,4
+loop L4
+exit
+main endp
+end main
